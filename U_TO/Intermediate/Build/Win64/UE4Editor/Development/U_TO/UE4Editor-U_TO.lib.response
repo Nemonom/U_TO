@@ -7,8 +7,10 @@
 /IGNORE:4221
 /NODEFAULTLIB
 "C:\Users\Zoe\Desktop\NEMONOM\Programming\U_TO\U_TO\U_TO\Intermediate\Build\Win64\U_TOEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.obj"
+"C:\Users\Zoe\Desktop\NEMONOM\Programming\U_TO\U_TO\U_TO\Intermediate\Build\Win64\UE4Editor\Development\U_TO\BaseGameObject.cpp.obj"
 "C:\Users\Zoe\Desktop\NEMONOM\Programming\U_TO\U_TO\U_TO\Intermediate\Build\Win64\UE4Editor\Development\U_TO\U_TO.cpp.obj"
 "C:\Users\Zoe\Desktop\NEMONOM\Programming\U_TO\U_TO\U_TO\Intermediate\Build\Win64\UE4Editor\Development\U_TO\U_TOGameModeBase.cpp.obj"
+"C:\Users\Zoe\Desktop\NEMONOM\Programming\U_TO\U_TO\U_TO\Intermediate\Build\Win64\UE4Editor\Development\U_TO\BaseGameObject.gen.cpp.obj"
 "C:\Users\Zoe\Desktop\NEMONOM\Programming\U_TO\U_TO\U_TO\Intermediate\Build\Win64\UE4Editor\Development\U_TO\U_TO.init.gen.cpp.obj"
 "C:\Users\Zoe\Desktop\NEMONOM\Programming\U_TO\U_TO\U_TO\Intermediate\Build\Win64\UE4Editor\Development\U_TO\U_TOGameModeBase.gen.cpp.obj"
 "C:\Users\Zoe\Desktop\NEMONOM\Programming\U_TO\U_TO\U_TO\Intermediate\Build\Win64\UE4Editor\Development\U_TO\Default.rc2.res"

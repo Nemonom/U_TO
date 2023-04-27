@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\U_TO.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{6558D59B-0927-4665-8046-B191DB0CCB60}</UniqueIdentifier>
+      <UniqueIdentifier>{D3B65860-1ECE-4B9B-AB82-8E8EFD3ABC78}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\U_TO.Target.cs">
       <Filter>Source</Filter>
@@ -12,7 +12,7 @@
       <Filter>Source</Filter>
     </None>
     <Filter Include="Config">
-      <UniqueIdentifier>{E78148DA-8DDB-41BC-9930-9CAE0548091D}</UniqueIdentifier>
+      <UniqueIdentifier>{BA9F48A2-0742-446C-A309-DE7A8BFF6AB0}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -24,7 +24,7 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\U_TO">
-      <UniqueIdentifier>{5B7270DD-5F54-4F07-8658-A089A5A6C44C}</UniqueIdentifier>
+      <UniqueIdentifier>{0BB3AA1F-6FC3-41C4-91BC-E537712ED2C5}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\U_TO\U_TO.Build.cs">
       <Filter>Source\U_TO</Filter>
@@ -40,6 +40,27 @@
     </ClCompile>
     <ClInclude Include="..\..\Source\U_TO\U_TOGameModeBase.h">
       <Filter>Source\U_TO</Filter>
+    </ClInclude>
+    <Filter Include="Source\U_TO\Private">
+      <UniqueIdentifier>{968D9280-39FF-453C-9B57-F31CC2C21AA1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\U_TO\Public">
+      <UniqueIdentifier>{32C576F3-8585-4E0E-8A69-154FB1208C5E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source\U_TO\GameObject">
+      <UniqueIdentifier>{d1fa63ba-0503-46f0-b4ee-1eec764fd123}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\U_TO\GameObject\BaseGameObject.cpp">
+      <Filter>Source\U_TO\GameObject</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\U_TO\GameObject\BaseGameObject.h">
+      <Filter>Source\U_TO\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
