@@ -148,6 +148,8 @@ Build/Android/res/*/*
 # Ignore plugins binaries on deep subfolders
 Plugins/**/Binaries/*
 Plugins/**/Intermediate/*
+*/Intermediate/*
+*/Saved/*
 
 ### VisualStudio ###
 ## Ignore Visual Studio temporary files, build results, and
