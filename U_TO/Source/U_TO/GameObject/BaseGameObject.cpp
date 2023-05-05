@@ -1,37 +1,31 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "BaseGameObject.h"
+#include "Kismet/GameplayStatics.h"
 
-// Sets default values
+#pragma region Base
 ABaseGameObject::ABaseGameObject()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	CollisionComponent_ = CreateDefaultSubobject<UPrimitiveComponent>(TEXT("CollisionComponent"));
 }
 
-// Called when the game starts or when spawned
 void ABaseGameObject::BeginPlay()
 {
 	Super::BeginPlay();
-
-	MyCollisionComponent_->OnComponentBeginOverlap.AddDynamic(this, &ABaseGameObject::OnOverlapBegin);
 }
 
-void ABaseGameObject::BeginDestroy()
+void ABaseGameObject::Destroyed()
 {
-	Super::BeginDestroy();
-
+	Super::Destroyed();
 }
 
-// Called every frame
 void ABaseGameObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-// Called to bind functionality to input
 void ABaseGameObject::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -41,4 +35,61 @@ void ABaseGameObject::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void ABaseGameObject::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 }
+#pragma endregion
 
+
+#pragma region Passive
+APassiveGameObject::APassiveGameObject()
+{
+}
+
+void APassiveGameObject::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+#pragma endregion
+
+#pragma region Active
+AActiveGameObject::AActiveGameObject()
+{
+	//// 활성화 또는 비활성화시킬 수 있는 파티클 시스템 생성
+	//OurParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("MovementParticles"));
+	//OurParticleSystem->SetupAttachment(SphereVisual);
+	//OurParticleSystem->bAutoActivate = false;
+	//OurParticleSystem->SetRelativeLocation(FVector(-20.0f, 0.0f, 20.0f));
+	//static ConstructorHelpers::FObjectFinder<UParticleSystem> ParticleAsset(TEXT("/Game/StarterContent/Particles/P_Fire.P_Fire"));
+	//if (ParticleAsset.Succeeded())
+	//{
+	//	OurParticleSystem->SetTemplate(ParticleAsset.Object);
+	//}
+}
+
+void AActiveGameObject::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	// Hp_ -= data;
+	
+	if (CheckDie())
+	{
+		Destroyed();
+	}
+}
+
+void AActiveGameObject::BeginPlay()
+{
+	CollisionComponent_->OnComponentBeginOverlap.AddDynamic(this, &AActiveGameObject::OnOverlapBegin);
+}
+
+void AActiveGameObject::Destroyed()
+{
+	if (DestroyEffect_)
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyEffect_, GetActorLocation());
+
+	Super::Destroyed();
+}
+
+bool AActiveGameObject::CheckDie()
+{
+	if (Hp_ <= 0)
+		return true;
+	return false;
+}
+#pragma endregion

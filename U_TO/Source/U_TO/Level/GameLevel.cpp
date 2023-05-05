@@ -2,8 +2,16 @@
 
 
 #include "GameLevel.h"
+#include "../../U_TO/GameObject/Enemy/EnemyManager/EnemyManager.h"
 
-void AMenuLevel::BeginPlay()
+void AGameLevel::BeginPlay()
 {
 	Super::BeginPlay();
+	EnemyManager_ = new EnemyManager();
+}
+
+void AGameLevel::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	EnemyManager_ = nullptr;
 }

@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class U_TO_API APlayerObject : public ABaseGameObject
+class U_TO_API APlayerObject : public AActiveGameObject
 {
 	GENERATED_BODY()
 
