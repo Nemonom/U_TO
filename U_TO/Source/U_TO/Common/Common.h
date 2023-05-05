@@ -3,10 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Common.generated.h"
 
-/**
- * 
- */
 UENUM()
 enum class EScene
 {
@@ -19,7 +17,6 @@ enum class EScene
 	END
 };
 
-UENUM()
 enum class EObjState
 {
 	NORMAL,
@@ -27,7 +24,6 @@ enum class EObjState
 	END
 };
 
-UENUM()
 enum class EGameState
 {
 	PLAY,
