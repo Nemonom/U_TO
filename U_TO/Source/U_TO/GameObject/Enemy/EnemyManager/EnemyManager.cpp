@@ -2,6 +2,7 @@
 
 
 #include "EnemyManager.h"
+#include "..\..\..\Level\LevelManager.h"
 
 EnemyManager::EnemyManager()
 {
