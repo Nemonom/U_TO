@@ -4,14 +4,18 @@
 #include "MenuUI.h"
 #include "Kismet/GameplayStatics.h"
 #include "../Level/LevelManager.h"
+#include "UMG.h"
 
 void UMenuUI::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	// test
-	//for (int i = 0; i < (int)EButtonType::Max; ++i)
-	//	MenuButton_[i] = Cast<UButton>(GetWidgetFromName(TEXT("pBar_Stamina")));
+	for (int i = 0; i < (int)EButtonType::Max; ++i)
+	{
+		FString ButtonName = FString::Printf(TEXT("btn_%d"), i);
+		UButton* tempButton = Cast<UButton>(GetWidgetFromName(*ButtonName));
+		MenuButton_.Add(tempButton);
+	}
 }
 
 void UMenuUI::ChangeLevel(int LevelIndex)

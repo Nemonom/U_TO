@@ -30,4 +30,5 @@ protected:
 protected:
 	UPROPERTY()
 		TArray<class UButton*> MenuButton_;
+		//class UButton* MenuButton_[3];
 };

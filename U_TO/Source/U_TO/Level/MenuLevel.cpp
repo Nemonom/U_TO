@@ -6,18 +6,29 @@
 #include "GameFramework/PlayerController.h"
 #include "EngineUtils.h"
 
+
 void AMenuLevel::BeginPlay()
 {
 	Super::BeginPlay();
 
-	APlayerController* PlayerController = nullptr;
-	for (TActorIterator<APlayerController> iter(GetWorld()); iter; ++iter)
+	//APlayerController* PlayerController = nullptr;
+	//for (TActorIterator<APlayerController> iter(GetWorld()); iter; ++iter)
+	//{
+	//	PlayerController = *iter;
+	//	break;
+	//}
+	//UMenuUI* YourWidget = CreateWidget<UMenuUI>(PlayerController, UMenuUI::StaticClass());
+	//if (YourWidget)
+	//	YourWidget->AddToViewport();
+
+	FStringClassReference MyWidgetClassRef(TEXT("/Game/menu_BP.menu_BP_C"));
+	UClass* WidgetClass = MyWidgetClassRef.TryLoadClass<UUserWidget>();
+	if (WidgetClass)
 	{
-		PlayerController = *iter;
-		break;
+		UMenuUI* menuWidget = Cast<UMenuUI>(CreateWidget<UUserWidget>(this->GetGameInstance(), WidgetClass));
+		if (menuWidget)
+			menuWidget->AddToViewport();
 	}
-	UMenuUI* YourWidget = CreateWidget<UMenuUI>(PlayerController, UMenuUI::StaticClass());
-	YourWidget->AddToViewport();
 }
 
 void AMenuLevel::Test()
