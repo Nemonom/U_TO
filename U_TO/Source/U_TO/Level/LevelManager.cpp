@@ -1,14 +1,12 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "LevelManager.h"
+#include "../Common/Common.h"
 
 LevelManager* LevelManager::Instance = nullptr;
 
 LevelManager::LevelManager()
 {
-	LevelInfos.Add(FName("Game"));
-	LevelInfos.Add(FName("Help"));
+	//LevelInfos.Add(FName("Game"));
+	//LevelInfos.Add(FName("Help"));
 }
 
 LevelManager::~LevelManager()
@@ -23,9 +21,38 @@ LevelManager* LevelManager::GetInstance()
 	return Instance;
 }
 
-FName LevelManager::GetLevelInfo(int LevelIndex)
+//FName LevelManager::GetLevelInfo(int LevelIndex)
+//{
+//	if (LevelInfos.Num() < LevelIndex)
+//		return LevelInfos[LevelIndex];
+//	return FName("");
+//}
+
+FName LevelManager::GetLevelName(ELevelType type)
 {
-	if (LevelInfos.Num() < LevelIndex)
-		return LevelInfos[LevelIndex];
+	switch (type)
+	{
+		case ELevelType::Game:
+		{
+			return FName("Game");
+		}
+		break;
+		case ELevelType::Help:
+		{
+			return FName("Help");
+		}
+		break;
+		case ELevelType::Exit:
+		{
+			return FName("Exit");
+		}
+		break;
+	}
+
 	return FName("");
+}
+
+void LevelManager::ChangeLevel(const UObject* WorldContextObject, ELevelType type)
+{
+	UGameplayStatics::OpenLevel(WorldContextObject, GetLevelName(type));
 }
