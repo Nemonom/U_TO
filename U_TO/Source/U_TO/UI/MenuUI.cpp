@@ -10,12 +10,22 @@ void UMenuUI::NativeConstruct()
 	{
 		FString ButtonName = FString::Printf(TEXT("btn_%d"), i);
 		UButton* tempButton = Cast<UButton>(GetWidgetFromName(*ButtonName));
-		tempButton->OnClicked.AddDynamic(this, &UMenuUI::ChangeLevel);
+
+		if (i == (int)LevelManager::ELevelType::Game)
+			tempButton->OnClicked.AddDynamic(this, &UMenuUI::OnClickGameButton);
+		else if (i == (int)LevelManager::ELevelType::Exit)
+			tempButton->OnClicked.AddDynamic(this, &UMenuUI::OnClickExitButton);
+
 		MenuButton_.Add(tempButton);
 	}
 }
 
-void UMenuUI::ChangeLevel()
+void UMenuUI::OnClickGameButton()
 {
-	LevelManager::GetInstance()->ChangeLevel(GetWorld(), LevelManager::ELevelType::Game);
+	UGameplayStatics::OpenLevel(GetWorld(), FName("GAME"));
+}
+
+void UMenuUI::OnClickExitButton()
+{
+	exit(0);
 }

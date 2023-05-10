@@ -14,7 +14,12 @@ class U_TO_API UMenuUI : public UUserWidget
 
 protected:
 	virtual void NativeConstruct() override;
-	void ChangeLevel();
+
+public:
+	UFUNCTION(BlueprintCallable)
+		void OnClickGameButton();
+	UFUNCTION(BlueprintCallable)
+		void OnClickExitButton();
 
 protected:
 	UPROPERTY()

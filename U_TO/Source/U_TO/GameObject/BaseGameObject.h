@@ -51,17 +51,16 @@ public:
 	AActiveGameObject();
 
 	virtual void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) override;
+	virtual bool Die(float KillingDamage, struct FDamageEvent const& DamageEvent, class AController* Killer, class AActor* DamageCauser);
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void Destroyed() override;
-
-private:
-	bool CheckDie();
 
 protected:
-	UParticleSystem*		DestroyEffect_{ nullptr };
+	UParticleSystem*		DestroyEffect{ nullptr };
 
 private:
-	float 					Hp_{ 0.f };
+	float 					Hp{ 0.f };
 };

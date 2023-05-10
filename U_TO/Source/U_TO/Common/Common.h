@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "../U_TOGameModeBase.h"
 #include "Common.generated.h"
 
 UENUM()

@@ -65,31 +65,43 @@ AActiveGameObject::AActiveGameObject()
 
 void AActiveGameObject::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	// Hp_ -= data;
-	
-	if (CheckDie())
+}
+
+float AActiveGameObject::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	if (Hp <= 0.f)
 	{
-		Destroyed();
+		return 0.f;
 	}
+
+	const float ActualDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+	if (ActualDamage > 0.f)
+	{
+		Hp -= ActualDamage;
+		if (Hp <= 0)
+		{
+			Die(ActualDamage, DamageEvent, EventInstigator, DamageCauser);
+		}
+
+		MakeNoise(1.0f, EventInstigator ? EventInstigator->GetPawn() : this);
+	}
+
+	return ActualDamage;
+}
+
+bool AActiveGameObject::Die(float KillingDamage, FDamageEvent const& DamageEvent, AController* Killer, AActor* DamageCauser)
+{
+	// GetWorld()->GetAuthGameMode<AShooterGameMode>()->Killed(Killer, KilledPlayer, this, DamageType);
+	// Destroy();
+
+	if (DestroyEffect)
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyEffect, GetActorLocation());
+
+	return true;
 }
 
 void AActiveGameObject::BeginPlay()
 {
 	CollisionComponent_->OnComponentBeginOverlap.AddDynamic(this, &AActiveGameObject::OnOverlapBegin);
-}
-
-void AActiveGameObject::Destroyed()
-{
-	if (DestroyEffect_)
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyEffect_, GetActorLocation());
-
-	Super::Destroyed();
-}
-
-bool AActiveGameObject::CheckDie()
-{
-	if (Hp_ <= 0)
-		return true;
-	return false;
 }
 #pragma endregion
