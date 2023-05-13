@@ -3,6 +3,15 @@
 
 #include "PlayerObject.h"
 
+APlayerObject::APlayerObject()
+{
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SPRINGARM"));
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
+
+	SpringArmComponent->SetupAttachment(CollisionComponent);
+	Camera->SetupAttachment(SpringArmComponent);
+}
+
 void APlayerObject::BeginPlay()
 {
 	Super::BeginPlay();

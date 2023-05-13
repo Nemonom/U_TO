@@ -25,9 +25,19 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
 
+public:
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+		class UCapsuleComponent* CollisionComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = Visual)
+		class USkeletalMeshComponent* MeshComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = Movement)
+		class UFloatingPawnMovement* MovementComponent;
+
 protected:
 	EObjState				ObjState_{ EObjState::NORMAL };
-	UPrimitiveComponent*	CollisionComponent_{ nullptr };
+	//UPrimitiveComponent*	CollisionComponent_{ nullptr };
 };
 
 UCLASS()
@@ -58,7 +68,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-protected:
+public:
 	UParticleSystem*		DestroyEffect{ nullptr };
 
 private:

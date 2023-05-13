@@ -7,7 +7,20 @@
 ABaseGameObject::ABaseGameObject()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	CollisionComponent_ = CreateDefaultSubobject<UPrimitiveComponent>(TEXT("CollisionComponent"));
+
+	CollisionComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CAPSULE"));
+	CollisionComponent->SetCapsuleHalfHeight(88.f);
+
+	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MESH"));
+	MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MOVEMENT"));
+
+	CollisionComponent->SetupAttachment(RootComponent);
+	MeshComponent->SetupAttachment(RootComponent);
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> 
+		SK_CARDBOARD(TEXT("/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"));
+	if (SK_CARDBOARD.Succeeded())
+		MeshComponent->SetSkeletalMesh(SK_CARDBOARD.Object);
 }
 
 void ABaseGameObject::BeginPlay()
@@ -102,6 +115,6 @@ bool AActiveGameObject::Die(float KillingDamage, FDamageEvent const& DamageEvent
 
 void AActiveGameObject::BeginPlay()
 {
-	CollisionComponent_->OnComponentBeginOverlap.AddDynamic(this, &AActiveGameObject::OnOverlapBegin);
+	// CollisionComponent_->OnComponentBeginOverlap.AddDynamic(this, &AActiveGameObject::OnOverlapBegin);
 }
 #pragma endregion
