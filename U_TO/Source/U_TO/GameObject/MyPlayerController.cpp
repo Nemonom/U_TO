@@ -3,3 +3,20 @@
 
 #include "MyPlayerController.h"
 
+void AMyPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	FInputModeGameOnly InputMode;
+	SetInputMode(InputMode);
+}
+
+void AMyPlayerController::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+}
+
+void AMyPlayerController::OnPossess(APawn* aPawn)
+{
+	Super::OnPossess(aPawn);
+}

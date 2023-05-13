@@ -18,7 +18,6 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 protected:
@@ -32,8 +31,6 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Visual)
 		class USkeletalMeshComponent* MeshComponent;
 
-	UPROPERTY(VisibleAnywhere, Category = Movement)
-		class UFloatingPawnMovement* MovementComponent;
 
 protected:
 	EObjState				ObjState_{ EObjState::NORMAL };

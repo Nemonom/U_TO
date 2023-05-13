@@ -15,4 +15,6 @@ class U_TO_API AU_TOGameModeBase : public AGameModeBase
 
 public:
 	AU_TOGameModeBase();
+
+	virtual void PostLogin(APlayerController* NewPlayer) override;
 };
