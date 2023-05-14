@@ -2,7 +2,6 @@
 
 
 #include "PlayerObject.h"
-#include "../../Common/U_TOCommon.h"
 
 APlayerObject::APlayerObject()
 {
@@ -25,6 +24,8 @@ APlayerObject::APlayerObject()
 	static ConstructorHelpers::FClassFinder<UAnimInstance> WARRIOR_ANI(TEXT("/Game/WarriorAnimBlueprint.WarriorAnimBlueprint_C"));
 	if (WARRIOR_ANI.Succeeded())
 		GetMesh()->SetAnimInstanceClass(WARRIOR_ANI.Class);
+
+	SetControlMode(0);
 }
 
 void APlayerObject::Tick(float DeltaTime)
@@ -36,8 +37,10 @@ void APlayerObject::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerObject::GoBack);
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerObject::GoForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &APlayerObject::LeftRight);
+
+	PlayerInputComponent->BindAction(TEXT("ChangeView"), EInputEvent::IE_Pressed, this, &APlayerObject::ChangeView);
 }
 
 void APlayerObject::PossessedBy(AController* NewController)
@@ -55,12 +58,50 @@ void APlayerObject::BeginPlay()
 	//	GetMesh()->PlayAnimation(AniAsset, true);
 }
 
-void APlayerObject::GoBack(float AxisValue)
+void APlayerObject::SetControlMode(int32 ControlMode)
 {
-	AddMovementInput(GetActorForwardVector(), AxisValue * 200);
+	if (ControlMode == 0)
+	{
+		SpringArm->TargetArmLength = 450.0f;
+		SpringArm->SetRelativeRotation(FRotator::ZeroRotator);
+		SpringArm->bUsePawnControlRotation = true;
+		SpringArm->bInheritPitch = true;
+		SpringArm->bInheritRoll = true;
+		SpringArm->bInheritYaw = true;
+		SpringArm->bDoCollisionTest = true;
+		bUseControllerRotationYaw = false;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
+	}
+}
+
+void APlayerObject::GoForward(float AxisValue)
+{
+	AddMovementInput(FRotationMatrix(FRotator(0.0f, GetControlRotation().Yaw, 0.0f)).GetUnitAxis(EAxis::X), AxisValue);
 }
 
 void APlayerObject::LeftRight(float AxisValue)
 {
-	AddMovementInput(GetActorRightVector(), AxisValue * 200);
+	AddMovementInput(FRotationMatrix(FRotator(0.0f, GetControlRotation().Yaw, 0.0f)).GetUnitAxis(EAxis::Y), AxisValue);
+}
+
+void APlayerObject::LookUp(float AxisValue)
+{
+	AddControllerPitchInput(AxisValue);
+}
+
+void APlayerObject::Rotate(float AxisValue)
+{
+	AddControllerYawInput(AxisValue);
+}
+
+void APlayerObject::ChangeView()
+{
+	//switch (CurrentControlMode)
+	//{
+	//case EViewMode::THIRD:
+	//	GetController()->SetControlRotation(GetActorRotation());
+	//	SetControlMode(EViewMode::FIRST);
+	//	break;
+	//}
 }

@@ -39,3 +39,9 @@ enum class ELevelType
 	EXIT,
 	MAX
 };
+
+enum class EViewMode
+{
+	FIRST,
+	THIRD
+};

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "../BaseGameObject.h"
+#include "../../Common/U_TOCommon.h"
 #include "PlayerObject.generated.h"
 
 /**
@@ -26,9 +27,15 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	void SetControlMode(int32 ControlMode);
+
 private:
-	void GoBack(float AxisValue);
+	void GoForward(float AxisValue);
 	void LeftRight(float AxisValue);
+	void LookUp(float AxisValue);
+	void Rotate(float AxisValue);
+
+	void ChangeView();
 
 public:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
@@ -36,4 +43,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = Camera)
 		class UCameraComponent* Camera;
+
+private:
+	EViewMode CurrentControlMode{ EViewMode::THIRD };
 };
