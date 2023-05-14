@@ -3,6 +3,11 @@
 
 #include "MyPlayerController.h"
 
+void AMyPlayerController::OnPossess(APawn* aPawn)
+{
+	Super::OnPossess(aPawn);
+}
+
 void AMyPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -10,14 +15,4 @@ void AMyPlayerController::BeginPlay()
 	FInputModeGameOnly GameInputMode;
 	SetInputMode(GameInputMode);
 	bShowMouseCursor = true;
-}
-
-void AMyPlayerController::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
-}
-
-void AMyPlayerController::OnPossess(APawn* aPawn)
-{
-	Super::OnPossess(aPawn);
 }

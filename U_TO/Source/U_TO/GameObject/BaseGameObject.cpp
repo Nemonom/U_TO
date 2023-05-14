@@ -7,18 +7,6 @@
 ABaseGameObject::ABaseGameObject()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
-	CollisionComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CAPSULE"));
-	CollisionComponent->SetCapsuleHalfHeight(88.f);
-	RootComponent = CollisionComponent;
-
-	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MESH"));
-	MeshComponent->SetupAttachment(RootComponent);
-	
-	
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_CARDBOARD(TEXT("/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"));
-	if (SK_CARDBOARD.Succeeded())
-		MeshComponent->SetSkeletalMesh(SK_CARDBOARD.Object);
 }
 
 void ABaseGameObject::BeginPlay()

@@ -5,13 +5,12 @@
 
 AU_TOGameModeBase::AU_TOGameModeBase()
 {
-	DefaultPawnClass = ABaseGameObject::StaticClass();
+	//DefaultPawnClass = APlayerObject::StaticClass();
+	DefaultPawnClass = AABCharacter::StaticClass();
 	PlayerControllerClass = AMyPlayerController::StaticClass();
 }
 
 void AU_TOGameModeBase::PostLogin(APlayerController* NewPlayer)
 {
-	FString::Printf(TEXT("GameModePostLogin Start"));
 	Super::PostLogin(NewPlayer);
-	FString::Printf(TEXT("GameModePostLogin End"));
 }

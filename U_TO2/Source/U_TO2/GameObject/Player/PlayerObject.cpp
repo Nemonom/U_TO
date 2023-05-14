@@ -2,6 +2,7 @@
 
 
 #include "PlayerObject.h"
+#include "../../Common/U_TOCommon.h"
 
 APlayerObject::APlayerObject()
 {
@@ -21,25 +22,22 @@ APlayerObject::APlayerObject()
 
 
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
-	UAnimationAsset* AniAsset = LoadObject<UAnimationAsset>(nullptr, TEXT("/Game/Book/Animations/WarriorRun.WarriorRun"));
-	if (AniAsset)
-		GetMesh()->PlayAnimation(AniAsset, true);
-	//GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-	//static ConstructorHelpers::FClassFinder<UAnimInstance> WARRIOR_ANIM(TEXT("/Game/Book/Animations/WarriorAnimBlueprint.WarriorAnimBlueprint_C"));
-	//if (WARRIOR_ANIM.Succeeded())
-	//{
-	//	GetMesh()->SetAnimInstanceClass(WARRIOR_ANIM.Class);
-	//}
+	static ConstructorHelpers::FClassFinder<UAnimInstance> WARRIOR_ANI(TEXT("/Game/WarriorAnimBlueprint.WarriorAnimBlueprint_C"));
+	if (WARRIOR_ANI.Succeeded())
+		GetMesh()->SetAnimInstanceClass(WARRIOR_ANI.Class);
+}
+
+void APlayerObject::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 }
 
 void APlayerObject::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(TEXT("GB"), this, &APlayerObject::GoBack);
-	PlayerInputComponent->BindAxis(TEXT("LR"), this, &APlayerObject::LeftRight);
-//	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APlayerObject::LookUp);
-//	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &APlayerObject::Rotate);
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerObject::GoBack);
+	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &APlayerObject::LeftRight);
 }
 
 void APlayerObject::PossessedBy(AController* NewController)
@@ -47,23 +45,14 @@ void APlayerObject::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 }
 
-void APlayerObject::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
-}
-
-void APlayerObject::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	Super::OnOverlapBegin(OverlappedComp, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
-}
-
-void APlayerObject::Tick(float DeltaSeconds)
-{
-}
-
 void APlayerObject::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	//UAnimationAsset* AniAsset = LoadObject<UAnimationAsset>(nullptr, TEXT("/Game/Book/Animations/WarriorRun.WarriorRun"));
+	//if (AniAsset)
+	//	GetMesh()->PlayAnimation(AniAsset, true);
 }
 
 void APlayerObject::GoBack(float AxisValue)

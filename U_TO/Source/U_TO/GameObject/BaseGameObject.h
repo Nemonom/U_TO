@@ -24,17 +24,8 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
 
-public:
-	UPROPERTY(VisibleAnywhere, Category = Collision)
-		class UCapsuleComponent* CollisionComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = Visual)
-		class USkeletalMeshComponent* MeshComponent;
-
-
 protected:
 	EObjState				ObjState_{ EObjState::NORMAL };
-	//UPrimitiveComponent*	CollisionComponent_{ nullptr };
 };
 
 UCLASS()

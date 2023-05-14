@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "GameObject/MyPlayerController.h"
-#include "GameObject/BaseGameObject.h"
+//#include "GameObject/BaseGameObject.h"
+#include "GameObject/Player/PlayerObject.h"
+#include "ABCharacter.h"
 #include "U_TOGameModeBase.generated.h"
 
 UCLASS()

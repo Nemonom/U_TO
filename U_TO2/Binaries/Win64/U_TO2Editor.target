@@ -1,10 +1,10 @@
 {
-	"TargetName": "U_TOEditor",
+	"TargetName": "U_TO2Editor",
 	"Platform": "Win64",
 	"Configuration": "Development",
 	"TargetType": "Editor",
 	"Architecture": "",
-	"Project": "../../U_TO.uproject",
+	"Project": "../../U_TO2.uproject",
 	"Launch": "$(EngineDir)/Binaries/Win64/UE4Editor.exe",
 	"Version": 
 	{
@@ -864,11 +864,11 @@
 			"Type": "DynamicLibrary"
 		},
 		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UE4Editor-U_TO.dll",
+			"Path": "$(ProjectDir)/Binaries/Win64/UE4Editor-U_TO2.dll",
 			"Type": "DynamicLibrary"
 		},
 		{
-			"Path": "$(ProjectDir)/Binaries/Win64/UE4Editor-U_TO.pdb",
+			"Path": "$(ProjectDir)/Binaries/Win64/UE4Editor-U_TO2.pdb",
 			"Type": "SymbolFile"
 		},
 		{
@@ -2850,7 +2850,7 @@
 	],
 	"RuntimeDependencies": [
 		{
-			"Path": "$(ProjectDir)/U_TO.uproject",
+			"Path": "$(ProjectDir)/U_TO2.uproject",
 			"Type": "UFS"
 		},
 		{
