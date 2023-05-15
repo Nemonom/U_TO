@@ -26,6 +26,8 @@ APlayerObject::APlayerObject()
 		GetMesh()->SetAnimInstanceClass(WARRIOR_ANI.Class);
 
 	SetControlMode(0);
+
+	GetCharacterMovement()->JumpZVelocity = 800.f;
 }
 
 void APlayerObject::Tick(float DeltaTime)
@@ -39,8 +41,13 @@ void APlayerObject::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerObject::GoForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &APlayerObject::LeftRight);
+	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APlayerObject::LookUp);
+	PlayerInputComponent->BindAxis(TEXT("Rotate"), this, &APlayerObject::Rotate);
 
 	PlayerInputComponent->BindAction(TEXT("ChangeView"), EInputEvent::IE_Pressed, this, &APlayerObject::ChangeView);
+
+	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+
 }
 
 void APlayerObject::PossessedBy(AController* NewController)
@@ -71,6 +78,7 @@ void APlayerObject::SetControlMode(int32 ControlMode)
 		SpringArm->bDoCollisionTest = true;
 		bUseControllerRotationYaw = false;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
+		GetCharacterMovement()->bUseControllerDesiredRotation = true;
 		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
 	}
 }
