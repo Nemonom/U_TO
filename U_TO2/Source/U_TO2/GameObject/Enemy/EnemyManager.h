@@ -12,4 +12,9 @@ class U_TO2_API EnemyManager
 public:
 	EnemyManager();
 	~EnemyManager();
+
+	void CreateEnemy();
+
+private:
+	TArray<TSharedRef<class UEnemyObject>> Enemys;
 };

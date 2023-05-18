@@ -10,3 +10,7 @@ EnemyManager::EnemyManager()
 EnemyManager::~EnemyManager()
 {
 }
+
+void EnemyManager::CreateEnemy()
+{
+}
