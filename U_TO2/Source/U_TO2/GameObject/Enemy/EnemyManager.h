@@ -13,8 +13,11 @@ public:
 	EnemyManager();
 	~EnemyManager();
 
+	void Tick(float DeltaTime);
+
 	void CreateEnemy();
 
 private:
 	TArray<TSharedRef<class UEnemyObject>> Enemys;
+	float Timer{ 0.f };
 };

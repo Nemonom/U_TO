@@ -11,6 +11,11 @@ EnemyManager::~EnemyManager()
 {
 }
 
+void EnemyManager::Tick(float DeltaTime)
+{
+	
+}
+
 void EnemyManager::CreateEnemy()
 {
 }

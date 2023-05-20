@@ -2,6 +2,7 @@
 
 
 #include "PlayerObject.h"
+#include "../../Ani/PlayerAnimInstance.h"
 
 APlayerObject::APlayerObject()
 {
@@ -28,11 +29,34 @@ APlayerObject::APlayerObject()
 	SetControlMode(0);
 
 	GetCharacterMovement()->JumpZVelocity = 800.f;
+
+	AttackEndComboState();
 }
 
 void APlayerObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void APlayerObject::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	Anim = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
+	if (nullptr == Anim)
+		return;
+
+	Anim->OnMontageEnded.AddDynamic(this, &APlayerObject::OnAttackMontageEnded);
+
+	Anim->OnNextAttackCheck.AddLambda([this]() -> void {
+		CanNextCombo = false;
+		if (IsComboInputOn)
+		{
+			AttackStartComboState();
+			Anim->JumpToAttackMontageSection(CurrentCombo);
+		}
+		});
+
 }
 
 void APlayerObject::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -45,14 +69,19 @@ void APlayerObject::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAxis(TEXT("Rotate"), this, &APlayerObject::Rotate);
 
 	PlayerInputComponent->BindAction(TEXT("ChangeView"), EInputEvent::IE_Pressed, this, &APlayerObject::ChangeView);
-
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &APlayerObject::Attack);
 
 }
 
 void APlayerObject::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+}
+
+bool APlayerObject::GetIsUsingDash()
+{
+	return IsUsingDash;
 }
 
 void APlayerObject::BeginPlay()
@@ -112,4 +141,51 @@ void APlayerObject::ChangeView()
 	//	SetControlMode(EViewMode::FIRST);
 	//	break;
 	//}
+}
+
+void APlayerObject::Attack()
+{
+	if (IsAttacking)
+	{
+		if (CanNextCombo)
+		{
+			IsComboInputOn = true;
+		}
+		Anim->JumpToAttackMontageSection(CurrentCombo);
+		CurrentCombo++;
+		CurrentCombo %= 5;
+		// 코드 수정
+	}
+	else
+	{
+		AttackStartComboState();
+		Anim->PlayAttackMontage();
+		//Anim->JumpToAttackMontageSection(CurrentCombo);
+		IsAttacking = true;
+	}
+}
+
+void APlayerObject::SetDash(bool Enable)
+{
+	IsUsingDash = Enable;
+}
+
+void APlayerObject::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	IsAttacking = false;
+	AttackEndComboState();
+}
+
+void APlayerObject::AttackStartComboState()
+{
+	CanNextCombo = true;
+	IsComboInputOn = false;
+	CurrentCombo = FMath::Clamp<int32>(CurrentCombo + 1, 1, MaxCombo);
+}
+
+void APlayerObject::AttackEndComboState()
+{
+	IsComboInputOn = false;
+	CanNextCombo = false;
+	CurrentCombo = 0;
 }
