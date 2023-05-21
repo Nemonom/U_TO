@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Engine.h"
 
-UENUM()
 enum class EScene
 {
 	LOGO,
@@ -44,4 +43,11 @@ enum class EViewMode
 {
 	FIRST,
 	THIRD
+};
+
+enum class EObjType
+{
+	PLAYER,
+	BOSS,
+	ENEMY
 };

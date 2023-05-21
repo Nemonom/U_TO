@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "../../Common/U_TOCommon.h"
 
 /**
  * 
@@ -10,14 +11,20 @@
 class U_TO2_API EnemyManager
 {
 public:
-	EnemyManager();
+	EnemyManager(UWorld* InputWorld);
 	~EnemyManager();
 
 	void Tick(float DeltaTime);
 
-	void CreateEnemy();
+	void CreateEnemy(int cnt);
 
 private:
-	TArray<TSharedRef<class UEnemyObject>> Enemys;
+	TArray<TSharedPtr<class AEnemyObject>> Enemys;
+	//TArray<class AEnemyObject*> test;
 	float Timer{ 0.f };
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+		int CreateEnemyTimer{ 10 };
+
+	UWorld* World;
 };
