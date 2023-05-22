@@ -3,6 +3,7 @@
 
 #include "GameLevel.h"
 #include "../../U_TO2/GameObject/Enemy/EnemyManager.h"
+#include "../GameObject/Enemy/EnemyObject.h"
 
 void AGameLevel::BeginPlay()
 {

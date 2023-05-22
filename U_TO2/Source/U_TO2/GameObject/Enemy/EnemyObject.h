@@ -14,9 +14,9 @@ class U_TO2_API AEnemyObject : public ABaseGameObject
 	
 public:
 	AEnemyObject();
-	AEnemyObject(EObjType Type);
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void PostInitializeComponents() override;
 
+	virtual void Init(EObjType Type) override;
 };

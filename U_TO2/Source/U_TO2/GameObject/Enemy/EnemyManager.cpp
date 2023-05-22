@@ -7,10 +7,18 @@
 EnemyManager::EnemyManager(UWorld* InputWorld) : World(InputWorld)
 {
 	// 焊胶 积己
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	AEnemyObject* NewEnemy = World->SpawnActor<AEnemyObject>(AEnemyObject::StaticClass(), SpawnInfo);
+	TSharedPtr<AEnemyObject> Enemy = MakeShareable(NewEnemy);
+	Enemy->Init(EObjType::BOSS);
+	Enemys.Add(Enemy);
 }
 
 EnemyManager::~EnemyManager()
 {
+	Enemys.Empty();
 }
 
 void EnemyManager::Tick(float DeltaTime)
@@ -28,12 +36,12 @@ void EnemyManager::CreateEnemy(int cnt)
 {
 	for (int i = 0; i < cnt; ++i)
 	{
-		AEnemyObject* NewEnemy = World->SpawnActor<AEnemyObject>(AEnemyObject::StaticClass());
-		TSharedPtr<AEnemyObject> Enemy = MakeShareable(NewEnemy); // TSharedPtr 积己
+		FActorSpawnParameters SpawnInfo;
+		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		AEnemyObject* NewEnemy = World->SpawnActor<AEnemyObject>(AEnemyObject::StaticClass(), SpawnInfo);
+		TSharedPtr<AEnemyObject> Enemy = MakeShareable(NewEnemy);
+		Enemy->Init(EObjType::ENEMY);
 		Enemys.Add(Enemy);
-
-	/*	AEnemyObject* NewEnemy2 = NewObject<AEnemyObject>();
-		test.Add(NewEnemy2);*/
-
 	}
 }

@@ -5,9 +5,6 @@
 #include "CoreMinimal.h"
 #include "../../Common/U_TOCommon.h"
 
-/**
- * 
- */
 class U_TO2_API EnemyManager
 {
 public:
@@ -20,11 +17,10 @@ public:
 
 private:
 	TArray<TSharedPtr<class AEnemyObject>> Enemys;
-	//TArray<class AEnemyObject*> test;
 	float Timer{ 0.f };
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
-		int CreateEnemyTimer{ 10 };
+		int CreateEnemyTimer{ 30 };
 
-	UWorld* World;
+	UWorld* World{ nullptr };
 };

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "../Common/U_TOCommon.h"
 #include "BaseGameObject.generated.h"
 
 UCLASS()
@@ -26,4 +27,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void Init(EObjType Type);
+
+public:
+	EObjType ObjType{ EObjType::PLAYER };
 };

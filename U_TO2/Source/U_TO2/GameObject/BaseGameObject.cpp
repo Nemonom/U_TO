@@ -29,6 +29,9 @@ void ABaseGameObject::Tick(float DeltaTime)
 void ABaseGameObject::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
+void ABaseGameObject::Init(EObjType Type)
+{
+	ObjType = Type;
+}
