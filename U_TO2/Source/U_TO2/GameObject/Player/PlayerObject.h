@@ -11,7 +11,7 @@
  * 
  */
 UCLASS()
-class U_TO2_API APlayerObject : public ABaseGameObject
+class U_TO2_API APlayerObject : public AActiveGameObject
 {
 	GENERATED_BODY()
 
@@ -30,6 +30,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	void SetControlMode(int32 ControlMode);
+
+	UFUNCTION()
+		virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp
+			, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 private:
 	void GoForward(float AxisValue);

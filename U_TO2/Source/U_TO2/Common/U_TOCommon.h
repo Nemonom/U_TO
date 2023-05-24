@@ -51,3 +51,9 @@ enum class EObjType
 	BOSS,
 	ENEMY
 };
+
+enum class EPassiveObjType
+{
+	TEST,
+	ITEM
+};

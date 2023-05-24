@@ -4,6 +4,7 @@
 #include "GameLevel.h"
 #include "../../U_TO2/GameObject/Enemy/EnemyManager.h"
 #include "../GameObject/Enemy/EnemyObject.h"
+#include "../GameObject/BaseGameObject.h"
 
 void AGameLevel::BeginPlay()
 {
@@ -11,6 +12,15 @@ void AGameLevel::BeginPlay()
 
 	Super::BeginPlay();
 	EnemyManager_ = new EnemyManager(GetWorld());
+
+
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	APassiveGameObject* NewPassive = GetWorld()->SpawnActor<APassiveGameObject>(APassiveGameObject::StaticClass(), SpawnInfo);
+	TSharedPtr<APassiveGameObject> Passive = MakeShareable(NewPassive);
+	Passive->Init(EPassiveObjType::TEST);
+	PassiveObject.Add(Passive);
 }
 
 void AGameLevel::EndPlay(const EEndPlayReason::Type EndPlayReason)

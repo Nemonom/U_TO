@@ -3,12 +3,6 @@
 
 #include "EnemyObject.h"
 
-#define ENEMY_MESH_PATH "/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"
-#define BOSS_MESH_PATH "/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"
-
-#define ENEMY_ANI_PATH "/Game/WarriorAnimBlueprint.WarriorAnimBlueprint_C"
-#define BOSS_ANI_PATH "/Game/WarriorAnimBlueprint.WarriorAnimBlueprint_C"
-
 AEnemyObject::AEnemyObject()
 {
 }
@@ -26,19 +20,20 @@ void AEnemyObject::Tick(float DeltaTime)
 
 void AEnemyObject::Init(EObjType Type)
 {
+	ObjType = Type;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_CARDBOARD(TEXT(ENEMY_MESH_PATH));
-	if (SK_CARDBOARD.Succeeded())
-		GetMesh()->SetSkeletalMesh(SK_CARDBOARD.Object);
-
-
-	GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
-	static ConstructorHelpers::FClassFinder<UAnimInstance> WARRIOR_ANI(TEXT(ENEMY_ANI_PATH));
-	if (WARRIOR_ANI.Succeeded())
-		GetMesh()->SetAnimInstanceClass(WARRIOR_ANI.Class);
-	
 	int PosRange = ObjType == EObjType::BOSS ? 10 : 300;
+
+	USkeletalMesh* SkeletalMesh = LoadObject<USkeletalMesh>(nullptr, TEXT("/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Golden.SK_CharM_Golden"));
+	if (SkeletalMesh)
+		GetMesh()->SetSkeletalMesh(SkeletalMesh);
+	
+	GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
 	GetMesh()->SetRelativeLocationAndRotation(FVector(rand() % PosRange, rand() % PosRange, rand() % PosRange), FRotator(0, 0, 0));
+
+	UAnimInstance* Anim = LoadObject<UAnimInstance>(nullptr, TEXT("/Game/WarriorAnimBlueprint.WarriorAnimBlueprint_C"));
+	if (Anim)
+		GetMesh()->SetAnimInstanceClass(Anim->GetClass());
 
 	Super::Init(Type);
 }

@@ -6,6 +6,8 @@
 
 APlayerObject::APlayerObject()
 {
+	ObjType = EObjType::PLAYER;
+
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SPRINGARM"));
 	SpringArm->TargetArmLength = 400.f;
 	SpringArm->SetRelativeRotation(FRotator(-15.f, 0.f, 0.f));
@@ -50,7 +52,7 @@ void APlayerObject::PostInitializeComponents()
 
 	Anim->OnNextAttackCheck.AddLambda([this]() -> void {
 		CanNextCombo = false;
-		if (IsComboInputOn)
+		//if (IsComboInputOn)
 		{
 			AttackStartComboState();
 			Anim->JumpToAttackMontageSection(CurrentCombo);
@@ -88,10 +90,16 @@ void APlayerObject::BeginPlay()
 {
 	Super::BeginPlay();
 
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerObject::OnBeginOverlap);
 	//GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
 	//UAnimationAsset* AniAsset = LoadObject<UAnimationAsset>(nullptr, TEXT("/Game/Book/Animations/WarriorRun.WarriorRun"));
 	//if (AniAsset)
 	//	GetMesh()->PlayAnimation(AniAsset, true);
+}
+
+void APlayerObject::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	UE_LOG(LogTemp, Warning, TEXT("coll"));
 }
 
 void APlayerObject::SetControlMode(int32 ControlMode)
@@ -153,7 +161,7 @@ void APlayerObject::Attack()
 		}
 		Anim->JumpToAttackMontageSection(CurrentCombo);
 		CurrentCombo++;
-		CurrentCombo %= 5;
+		CurrentCombo %= 4;
 		// 코드 수정
 	}
 	else

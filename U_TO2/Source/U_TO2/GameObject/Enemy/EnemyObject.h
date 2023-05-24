@@ -8,7 +8,7 @@
 #include "EnemyObject.generated.h"
 
 UCLASS()
-class U_TO2_API AEnemyObject : public ABaseGameObject
+class U_TO2_API AEnemyObject : public AActiveGameObject
 {
 	GENERATED_BODY()
 	

@@ -27,7 +27,7 @@ void EnemyManager::Tick(float DeltaTime)
 
 	if (Timer >= CreateEnemyTimer)
 	{
-		CreateEnemy(3);
+		//CreateEnemy(3);
 		Timer = 0;
 	}
 }
