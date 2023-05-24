@@ -51,6 +51,7 @@ private:
 
 	void AttackStartComboState();
 	void AttackEndComboState();
+	void AttackCheck();
 
 public:
 	UPROPERTY(VisibleAnywhere, Category = Camera)

@@ -6,8 +6,7 @@ ABaseGameObject::ABaseGameObject()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	GetCapsuleComponent()->SetCapsuleHalfHeight(88.f);
-	GetCapsuleComponent()->SetCapsuleRadius(40.f);
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("ABaseGameObject"));
 }
 
 // Called when the game starts or when spawned
