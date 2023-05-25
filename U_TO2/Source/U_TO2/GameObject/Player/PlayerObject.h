@@ -63,6 +63,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
 		class UCameraComponent* Camera;
 
+	UPROPERTY(VisibleAnywhere, Category = Weapon)
+		class USkeletalMeshComponent* Weapon;
+
 private:
 	UPROPERTY()
 		class UPlayerAnimInstance* Anim{ nullptr };
