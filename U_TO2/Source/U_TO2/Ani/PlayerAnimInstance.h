@@ -23,6 +23,8 @@ public:
 	void PlayAttackMontage();
 	void JumpToAttackMontageSection(int32 NewSection);
 
+	void SetDeadAnim(bool input);
+
 private:
 	UFUNCTION()
 		void AnimNotify_AttackHitCheck();
@@ -48,4 +50,7 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		bool IsUsingDash{ false };
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
+		bool IsDead{ false };
 };

@@ -3,6 +3,7 @@
 
 #include "PlayerObject.h"
 #include "../../Ani/PlayerAnimInstance.h"
+#include "DrawDebugHelpers.h"
 
 APlayerObject::APlayerObject()
 {
@@ -33,6 +34,12 @@ APlayerObject::APlayerObject()
 	GetCharacterMovement()->JumpZVelocity = 800.f;
 
 	AttackEndComboState();
+
+	AttackRange = 200.0f;
+	AttackRadius = 50.0f;
+
+	Hp = 5;
+	Power = 2;
 }
 
 void APlayerObject::Tick(float DeltaTime)
@@ -82,6 +89,16 @@ void APlayerObject::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 }
 
+float APlayerObject::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	const float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	
+	if (Hp <= 0.f)
+		Die();
+
+	return ActualDamage;
+}
+
 bool APlayerObject::GetIsUsingDash()
 {
 	return IsUsingDash;
@@ -92,15 +109,17 @@ void APlayerObject::BeginPlay()
 	Super::BeginPlay();
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerObject::OnBeginOverlap);
-	//GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
-	//UAnimationAsset* AniAsset = LoadObject<UAnimationAsset>(nullptr, TEXT("/Game/Book/Animations/WarriorRun.WarriorRun"));
-	//if (AniAsset)
-	//	GetMesh()->PlayAnimation(AniAsset, true);
 }
 
 void APlayerObject::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("coll"));
+}
+
+void APlayerObject::Die()
+{
+	Anim->SetDeadAnim(true);
+	Super::Die();
 }
 
 void APlayerObject::SetControlMode(int32 ControlMode)
@@ -207,20 +226,40 @@ void APlayerObject::AttackCheck()
 	bool bResult = GetWorld()->SweepSingleByChannel(
 		HitResult,
 		GetActorLocation(),
-		GetActorLocation() + GetActorForwardVector() * 200,
+		GetActorLocation() + GetActorForwardVector() * AttackRange,
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel2,
-		FCollisionShape::MakeSphere(50),
+		FCollisionShape::MakeSphere(AttackRadius),
 		Params);
+
+#if ENABLE_DRAW_DEBUG
+
+	FVector TraceVec = GetActorForwardVector() * AttackRange;
+	FVector Center = GetActorLocation() + TraceVec * 0.5f;
+	float HalfHeight = AttackRange * 0.5f + AttackRadius;
+	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+	float DebugLifeTime = 5.0f;
+
+	DrawDebugCapsule(GetWorld(),
+		Center,
+		HalfHeight,
+		AttackRadius,
+		CapsuleRot,
+		DrawColor,
+		false,
+		DebugLifeTime);
+
+#endif
 
 	if (bResult)
 	{
 		if (HitResult.Actor.IsValid())
 		{
-			//ABLOG(Warning, TEXT("Hit Actor Name : %s"), *HitResult.Actor->GetName());
+			UE_LOG(LogTemp, Warning, TEXT("Hit Actor Name : %s"), *HitResult.Actor->GetName());
 
 			FDamageEvent DamageEvent;
-			HitResult.Actor->TakeDamage(50.0f, DamageEvent, GetController(), this);
+			HitResult.Actor->TakeDamage(Power, DamageEvent, GetController(), this);
 		}
 	}
 }

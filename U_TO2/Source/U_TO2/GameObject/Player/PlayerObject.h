@@ -23,6 +23,7 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PossessedBy(AController* NewController) override;
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	bool GetIsUsingDash();
 
@@ -30,6 +31,8 @@ protected:
 	virtual void BeginPlay() override;
 
 	void SetControlMode(int32 ControlMode);
+
+	virtual void Die() override;
 
 	UFUNCTION()
 		virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp
@@ -79,9 +82,13 @@ private:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		int32 MaxCombo { 4 };
 
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+		float AttackRange{ 0 };
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
+		float AttackRadius{ 0 };
+
 	EViewMode CurrentControlMode{ EViewMode::THIRD };
 
 	bool IsUsingDash{ false };
-	int Hp{ 0 };
-	int Mp{ 0 };
 };

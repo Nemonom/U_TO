@@ -65,20 +65,17 @@ public:
 	void SetIsDead(bool input);
 	bool GetIsDead();
 
-	void SetIsGodMode(bool input);
-	bool GetIsGodMode();
-
 protected:
 	// notify
 	void AttackCheck();
 
-	void Die();
+	virtual void Die();
 
 protected:
 	EObjType ObjType{ EObjType::PLAYER };
 
 	int64 Hp{ 0 };
+	int64 Mp{ 0 };
 	int64 Power{ 0 };
 	bool IsDead{ false };
-	bool IsGodMode{ false };
 };

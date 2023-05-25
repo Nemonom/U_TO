@@ -18,11 +18,13 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
 	auto Pawn = TryGetPawnOwner();
-	if (::IsValid(Pawn))
+	if (false == ::IsValid(Pawn))
+		return;
+
+	if (false == IsDead)
 	{
 		CurrentPawnSpeed = Pawn->GetVelocity().Size();
 
-		// ACharacter
 		if (auto Character = Cast<APlayerObject>(Pawn))
 		{
 			IsInAir = Character->GetMovementComponent()->IsFalling();
@@ -40,6 +42,11 @@ void UPlayerAnimInstance::PlayAttackMontage()
 void UPlayerAnimInstance::JumpToAttackMontageSection(int32 NewSection)
 {
 	Montage_JumpToSection(GetAttackMontageSectionName(NewSection));
+}
+
+void UPlayerAnimInstance::SetDeadAnim(bool input)
+{
+	IsDead = input;
 }
 
 void UPlayerAnimInstance::AnimNotify_AttackHitCheck()

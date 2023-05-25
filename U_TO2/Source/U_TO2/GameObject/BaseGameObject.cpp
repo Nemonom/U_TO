@@ -47,8 +47,8 @@ void APassiveGameObject::Init(EPassiveObjType Type)
 	if (SkeletalMesh)
 		GetMesh()->SetSkeletalMesh(SkeletalMesh);
 
-	GetMesh()->SetRelativeLocationAndRotation(FVector(-47, 186, 110), FRotator(0, 0, 0));
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, 0), FRotator(0, 0, 0));
 
 	UAnimInstance* Anim = LoadObject<UAnimInstance>(nullptr, TEXT("/Game/WarriorAnimBlueprint.WarriorAnimBlueprint_C"));
 	if (Anim)
@@ -66,7 +66,7 @@ void APassiveGameObject::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent
 {
 	if (OtherActor->IsA(AActiveGameObject::StaticClass()))
 	{
-		Destroy();
+		// Destroy();
 	}
 }
 
@@ -81,9 +81,6 @@ void AActiveGameObject::Init(EObjType Type)
 
 float AActiveGameObject::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	if (GetIsGodMode())
-		return 0.f;
-
 	const float ActualDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 	if (ActualDamage > 0.f)
 	{
@@ -109,16 +106,6 @@ void AActiveGameObject::SetIsDead(bool input)
 bool AActiveGameObject::GetIsDead()
 {
 	return IsDead;
-}
-
-void AActiveGameObject::SetIsGodMode(bool input)
-{
-	IsGodMode = input;
-}
-
-bool AActiveGameObject::GetIsGodMode()
-{
-	return IsGodMode;
 }
 
 void AActiveGameObject::AttackCheck()
