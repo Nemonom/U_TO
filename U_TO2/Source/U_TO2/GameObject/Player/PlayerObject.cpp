@@ -3,6 +3,7 @@
 
 #include "PlayerObject.h"
 #include "../../Ani/PlayerAnimInstance.h"
+#include "../../Weapon/WeaponObject.h"
 #include "DrawDebugHelpers.h"
 
 APlayerObject::APlayerObject()
@@ -29,23 +30,15 @@ APlayerObject::APlayerObject()
 	if (WARRIOR_ANI.Succeeded())
 		GetMesh()->SetAnimInstanceClass(WARRIOR_ANI.Class);
 
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("PlayerObject"));
+
+
 	SetControlMode(0);
 
 	GetCharacterMovement()->JumpZVelocity = 800.f;
 
 	AttackEndComboState();
 
-	FName WeaponSocket(TEXT("hand_rSocket"));
-	if (GetMesh()->DoesSocketExist(WeaponSocket))
-	{
-		Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WEWAPON"));
-		static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_WEAPON(TEXT("/Game/InfinityBladeWeapons/Weapons/Blade/Swords/Blade_BlackKnight/SK_Blade_BlackKnight.SK_Blade_BlackKnight"));
-		if (SK_WEAPON.Succeeded())
-		{
-			Weapon->SetSkeletalMesh(SK_WEAPON.Object);
-		}
-		Weapon->SetupAttachment(GetMesh(), WeaponSocket);
-	}
 
 	AttackRange = 200.0f;
 	AttackRadius = 50.0f;
@@ -120,12 +113,27 @@ void APlayerObject::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//FName WeaponSocket(TEXT("hand_rSocket"));
+	//if (auto CurWeapon = GetWorld()->SpawnActor<AWeaponObject>(FVector::ZeroVector, FRotator::ZeroRotator))
+	//	CurWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
+
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerObject::OnBeginOverlap);
 }
 
 void APlayerObject::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("coll"));
+}
+
+void APlayerObject::SetWeapon(AWeaponObject* NewWeapon)
+{
+	FName WeaponSocket(TEXT("hand_rSocket"));
+	if (nullptr != NewWeapon)
+	{
+		NewWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
+		NewWeapon->SetOwner(this);
+		Weapon = NewWeapon;
+	}
 }
 
 void APlayerObject::Die()

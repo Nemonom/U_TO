@@ -29,11 +29,22 @@ void AEnemyObject::Init(EObjType Type)
 		GetMesh()->SetSkeletalMesh(SkeletalMesh);
 	
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
-	GetMesh()->SetRelativeLocationAndRotation(FVector(rand() % PosRange, rand() % PosRange, rand() % PosRange), FRotator(0, 0, 0));
-
+	RootComponent->SetRelativeLocationAndRotation(FVector(rand() % PosRange, rand() % PosRange, rand() % PosRange), FRotator(0, 0, 0));
+	
 	UAnimInstance* Anim = LoadObject<UAnimInstance>(nullptr, TEXT("/Game/WarriorAnimBlueprint.WarriorAnimBlueprint_C"));
 	if (Anim)
 		GetMesh()->SetAnimInstanceClass(Anim->GetClass());
+
+	if (ObjType == EObjType::ENEMY)
+	{
+		Hp = 5;
+		Power = 2;
+	}
+	else if (ObjType == EObjType::BOSS)
+	{
+		Hp = 50;
+		Power = 5;
+	}
 
 	Super::Init(Type);
 }

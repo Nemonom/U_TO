@@ -52,6 +52,12 @@ enum class EObjType
 	ENEMY
 };
 
+enum class EWeaponType
+{
+	TEST1,
+	TEST2
+};
+
 enum class EPassiveObjType
 {
 	TEST,
