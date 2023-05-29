@@ -41,12 +41,8 @@ APlayerObject::APlayerObject()
 
 	AttackEndComboState();
 
-
 	AttackRange = 200.0f;
 	AttackRadius = 50.0f;
-
-	Hp = 5;
-	Power = 2;
 }
 
 void APlayerObject::Tick(float DeltaTime)
@@ -64,14 +60,20 @@ void APlayerObject::PostInitializeComponents()
 
 	Anim->OnMontageEnded.AddDynamic(this, &APlayerObject::OnAttackMontageEnded);
 
+		Anim->OnNextAttackCheck.AddLambda([this]() -> void {
+		UE_LOG(LogTemp, Warning, TEXT("OnNextAttackCheck %d"), CurrentCombo);
+	});
+
 	Anim->OnNextAttackCheck.AddLambda([this]() -> void {
 		CanNextCombo = false;
-		//if (IsComboInputOn)
+		if (IsComboInputOn)
 		{
 			AttackStartComboState();
+			UE_LOG(LogTemp, Warning, TEXT("JumpToAttackMontageSection %d"), CurrentCombo);
 			Anim->JumpToAttackMontageSection(CurrentCombo);
 		}
-		});
+	});
+
 
 	Anim->OnAttackHitCheck.AddUObject(this, &APlayerObject::AttackCheck);
 
@@ -197,20 +199,13 @@ void APlayerObject::Attack()
 {
 	if (IsAttacking)
 	{
-		if (CanNextCombo)
-		{
-			IsComboInputOn = true;
-		}
-		Anim->JumpToAttackMontageSection(CurrentCombo);
-		CurrentCombo++;
-		CurrentCombo %= 4;
-		// 코드 수정
+		IsComboInputOn = CanNextCombo;
 	}
 	else
 	{
 		AttackStartComboState();
 		Anim->PlayAttackMontage();
-		//Anim->JumpToAttackMontageSection(CurrentCombo);
+		Anim->JumpToAttackMontageSection(CurrentCombo);
 		IsAttacking = true;
 	}
 }

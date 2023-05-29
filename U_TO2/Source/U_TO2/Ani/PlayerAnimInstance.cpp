@@ -41,7 +41,7 @@ void UPlayerAnimInstance::PlayAttackMontage()
 
 void UPlayerAnimInstance::JumpToAttackMontageSection(int32 NewSection)
 {
-	Montage_JumpToSection(GetAttackMontageSectionName(NewSection));
+	Montage_JumpToSection(GetAttackMontageSectionName(NewSection), AttackMontage);
 }
 
 void UPlayerAnimInstance::SetDeadAnim(bool input)
