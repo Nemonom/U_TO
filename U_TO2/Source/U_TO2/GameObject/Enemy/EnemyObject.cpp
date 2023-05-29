@@ -35,16 +35,5 @@ void AEnemyObject::Init(EObjType Type)
 	if (Anim)
 		GetMesh()->SetAnimInstanceClass(Anim->GetClass());
 
-	if (ObjType == EObjType::ENEMY)
-	{
-		Hp = 5;
-		Power = 2;
-	}
-	else if (ObjType == EObjType::BOSS)
-	{
-		Hp = 50;
-		Power = 5;
-	}
-
 	Super::Init(Type);
 }

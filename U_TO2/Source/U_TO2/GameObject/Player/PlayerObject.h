@@ -67,6 +67,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Weapon)
 		class AWeaponObject* Weapon;
 
+	UPROPERTY(VisibleAnywhere, Category = Stat)
+		class UCharacterStatComponent* CharacterStat;
+
 private:
 	UPROPERTY()
 		class UPlayerAnimInstance* Anim{ nullptr };

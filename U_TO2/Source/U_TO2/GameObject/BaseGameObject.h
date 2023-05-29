@@ -73,9 +73,5 @@ protected:
 
 protected:
 	EObjType ObjType{ EObjType::PLAYER };
-
-	int64 Hp{ 0 };
-	int64 Mp{ 0 };
-	int64 Power{ 0 };
 	bool IsDead{ false };
 };

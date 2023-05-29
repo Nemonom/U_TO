@@ -4,6 +4,7 @@
 #include "PlayerObject.h"
 #include "../../Ani/PlayerAnimInstance.h"
 #include "../../Weapon/WeaponObject.h"
+#include "../CharacterStatComponent.h"
 #include "DrawDebugHelpers.h"
 
 APlayerObject::APlayerObject()
@@ -32,6 +33,7 @@ APlayerObject::APlayerObject()
 
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("PlayerObject"));
 
+	CharacterStat = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("CHARACTERSTAT"));
 
 	SetControlMode(0);
 
@@ -72,6 +74,11 @@ void APlayerObject::PostInitializeComponents()
 		});
 
 	Anim->OnAttackHitCheck.AddUObject(this, &APlayerObject::AttackCheck);
+
+
+	CharacterStat->OnHPIsZero.AddLambda([this]() -> void {
+		Die();
+	});
 }
 
 void APlayerObject::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -98,8 +105,7 @@ float APlayerObject::TakeDamage(float DamageAmount, FDamageEvent const& DamageEv
 {
 	const float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	
-	if (Hp <= 0.f)
-		Die();
+	CharacterStat->SetDamage(ActualDamage);
 
 	return ActualDamage;
 }
@@ -112,10 +118,6 @@ bool APlayerObject::GetIsUsingDash()
 void APlayerObject::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//FName WeaponSocket(TEXT("hand_rSocket"));
-	//if (auto CurWeapon = GetWorld()->SpawnActor<AWeaponObject>(FVector::ZeroVector, FRotator::ZeroRotator))
-	//	CurWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerObject::OnBeginOverlap);
 }
@@ -279,7 +281,7 @@ void APlayerObject::AttackCheck()
 			UE_LOG(LogTemp, Warning, TEXT("Hit Actor Name : %s"), *HitResult.Actor->GetName());
 
 			FDamageEvent DamageEvent;
-			HitResult.Actor->TakeDamage(Power, DamageEvent, GetController(), this);
+			HitResult.Actor->TakeDamage(CharacterStat->GetAttack(), DamageEvent, GetController(), this);
 		}
 	}
 }

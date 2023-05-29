@@ -82,12 +82,6 @@ void AActiveGameObject::Init(EObjType Type)
 float AActiveGameObject::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	const float ActualDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
-	if (ActualDamage > 0.f)
-	{
-		Hp -= ActualDamage;
-		if (Hp <= 0.f)
-			Die();
-	}
 	return ActualDamage;
 }
 
@@ -96,6 +90,7 @@ void AActiveGameObject::Die()
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SetActorEnableCollision(false);
 }
 
 void AActiveGameObject::SetIsDead(bool input)
