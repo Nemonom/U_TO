@@ -23,7 +23,12 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
+	virtual void BeginPlay() override;
 	virtual void Die() override;
+
+public:
+	UPROPERTY(VisibleAnywhere, Category = Effect)
+		UParticleSystemComponent* Effect;
 
 private:
 	UPROPERTY()

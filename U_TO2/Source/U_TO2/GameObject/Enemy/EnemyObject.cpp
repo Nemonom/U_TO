@@ -16,6 +16,19 @@ AEnemyObject::AEnemyObject()
 		GetMesh()->SetAnimInstanceClass(WARRIOR_ANI.Class);
 
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("PlayerObject"));
+
+	Effect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("EFFECT"));
+	Effect->SetupAttachment(RootComponent);
+
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> P_OPEN(TEXT("/Game/InfinityBladeGrassLands/Effects/FX_Treasure/Chest/P_TreasureChest_Open_Mesh.P_TreasureChest_Open_Mesh"));
+
+	if (P_OPEN.Succeeded())
+	{
+		Effect->SetTemplate(P_OPEN.Object);
+		Effect->bAutoActivate = false;
+	}
+
+
 }
 
 
@@ -24,8 +37,6 @@ void AEnemyObject::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	Anim = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
-	if (nullptr == Anim)
-		return;
 
 	CharacterStat->OnHPIsZero.AddLambda([this]() -> void {
 		Die();
@@ -43,7 +54,7 @@ void AEnemyObject::Init(EObjType Type)
 
 	int PosRange = ObjType == EObjType::BOSS ? 10 : 300;
 
-	//FString MeshPath;
+	FString MeshPath;
 
 	//if (ObjType == EObjType::BOSS)
 	//	MeshPath = TEXT("/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Warrior.SK_CharM_Warrior");
@@ -56,12 +67,14 @@ void AEnemyObject::Init(EObjType Type)
 
 	//GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
 
-	//MeshPath = TEXT("/Game/WarriorAnimBlueprint.WarriorAnimBlueprint");
+	MeshPath = TEXT("/Game/WarriorAnimBlueprint.WarriorAnimBlueprint");
 
 	//auto test = Cast<UAnimInstance>(LoadObject<UObject>(NULL, *MeshPath));
 	//UAnimInstance* AniInstance = test;
 	//if (AniInstance)
 	//	GetMesh()->SetAnimInstanceClass(AniInstance->GetClass());
+	UAnimationAsset* test = LoadObject<UAnimationAsset>(NULL, *MeshPath);
+	GetMesh()->PlayAnimation(test, true);
 
 	RootComponent->SetRelativeLocationAndRotation(FVector(rand() % PosRange, rand() % PosRange, rand() % PosRange), FRotator(0, 0, 0));
 	
@@ -75,6 +88,13 @@ float AEnemyObject::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	CharacterStat->SetDamage(ActualDamage);
 
 	return ActualDamage;
+}
+
+void AEnemyObject::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Effect->Activate(true);
 }
 
 void AEnemyObject::Die()
