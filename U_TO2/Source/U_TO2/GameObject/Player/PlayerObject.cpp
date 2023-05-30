@@ -4,8 +4,8 @@
 #include "PlayerObject.h"
 #include "../../Ani/PlayerAnimInstance.h"
 #include "../../Weapon/WeaponObject.h"
-#include "../CharacterStatComponent.h"
 #include "DrawDebugHelpers.h"
+#include "../CharacterStatComponent.h"
 
 APlayerObject::APlayerObject()
 {
@@ -33,8 +33,6 @@ APlayerObject::APlayerObject()
 
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("PlayerObject"));
 
-	CharacterStat = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("CHARACTERSTAT"));
-
 	SetControlMode(0);
 
 	GetCharacterMovement()->JumpZVelocity = 800.f;
@@ -43,6 +41,8 @@ APlayerObject::APlayerObject()
 
 	AttackRange = 200.0f;
 	AttackRadius = 50.0f;
+
+
 }
 
 void APlayerObject::Tick(float DeltaTime)

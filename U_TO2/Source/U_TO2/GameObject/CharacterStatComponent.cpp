@@ -44,13 +44,18 @@ void UCharacterStatComponent::SetLevel(int32 InputLevel)
 void UCharacterStatComponent::SetHP(int32 Hp)
 {
 	CurrentHP = Hp;
+	OnHPChanged.Broadcast();
+
+	if (CurrentHP < KINDA_SMALL_NUMBER)
+	{
+		CurrentHP = 0.f;
+		OnHPIsZero.Broadcast();
+	}
 }
 
 void UCharacterStatComponent::SetDamage(float NewDamage)
 {
 	SetHP(FMath::Clamp<float>(CurrentHP - NewDamage, 0.0f, CurrentStatData->MaxHP));
-	if (CurrentHP <= 0.f)
-		OnHPIsZero.Broadcast();
 }
 
 float UCharacterStatComponent::GetAttack()

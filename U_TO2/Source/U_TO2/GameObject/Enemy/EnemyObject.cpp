@@ -1,7 +1,5 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "EnemyObject.h"
+#include "../CharacterStatComponent.h"
 
 AEnemyObject::AEnemyObject()
 {
@@ -11,6 +9,10 @@ AEnemyObject::AEnemyObject()
 void AEnemyObject::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
+
+	CharacterStat->OnHPIsZero.AddLambda([this]() -> void {
+		Die();
+		});
 }
 
 void AEnemyObject::Tick(float DeltaTime)
@@ -36,4 +38,13 @@ void AEnemyObject::Init(EObjType Type)
 		GetMesh()->SetAnimInstanceClass(Anim->GetClass());
 
 	Super::Init(Type);
+}
+
+float AEnemyObject::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	const float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	CharacterStat->SetDamage(ActualDamage);
+
+	return ActualDamage;
 }

@@ -59,17 +59,25 @@ public:
 	AActiveGameObject();
 
 	virtual void Init(EObjType Type);
-	
+
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
 
 	void SetIsDead(bool input);
 	bool GetIsDead();
 
 protected:
-	// notify
+	virtual void BeginPlay() override;
+
 	void AttackCheck();
 
 	virtual void Die();
+
+public:
+	UPROPERTY(VisibleAnywhere, Category = Stat)
+		class UCharacterStatComponent* CharacterStat; 
+	
+	UPROPERTY(VisibleAnywhere, Category = UI)
+		class UWidgetComponent* HPBar;
 
 protected:
 	EObjType ObjType{ EObjType::PLAYER };

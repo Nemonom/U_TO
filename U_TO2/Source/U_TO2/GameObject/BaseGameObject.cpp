@@ -1,4 +1,7 @@
 #include "BaseGameObject.h"
+#include "CharacterStatComponent.h"
+#include "Components/WidgetComponent.h"
+#include "../UI/CharacterWidget.h"
 
 // Sets default values
 ABaseGameObject::ABaseGameObject()
@@ -72,6 +75,18 @@ void APassiveGameObject::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent
 
 AActiveGameObject::AActiveGameObject()
 {
+	CharacterStat = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("CHARACTERSTAT"));
+	
+	HPBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBARWIDGET"));
+	HPBar->SetupAttachment(GetMesh());
+	HPBar->SetRelativeLocation(FVector(0.0f, 0.0f, 180.0f));
+	HPBar->SetWidgetSpace(EWidgetSpace::Screen);
+	static ConstructorHelpers::FClassFinder<UUserWidget> UI_HUD(TEXT("/Game/Book/UI/UI_HPBar.UI_HPBar_C"));
+	if (UI_HUD.Succeeded())
+	{
+		HPBar->SetWidgetClass(UI_HUD.Class);
+		HPBar->SetDrawSize(FVector2D(150.0f, 50.0f));
+	}
 }
 
 void AActiveGameObject::Init(EObjType Type)
@@ -101,6 +116,15 @@ void AActiveGameObject::SetIsDead(bool input)
 bool AActiveGameObject::GetIsDead()
 {
 	return IsDead;
+}
+
+void AActiveGameObject::BeginPlay()
+{
+	Super::BeginPlay();
+
+	auto CharacterWidget = Cast<UCharacterWidget>(HPBar->GetUserWidgetObject());
+	if (CharacterWidget)
+		CharacterWidget->BindCharacterStat(CharacterStat);
 }
 
 void AActiveGameObject::AttackCheck()

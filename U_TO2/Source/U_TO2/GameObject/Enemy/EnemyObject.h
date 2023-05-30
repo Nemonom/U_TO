@@ -19,4 +19,6 @@ public:
 	virtual void PostInitializeComponents() override;
 
 	virtual void Init(EObjType Type) override;
+
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 };
