@@ -18,9 +18,7 @@ void AGameLevel::BeginPlay()
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	APassiveGameObject* NewPassive = GetWorld()->SpawnActor<APassiveGameObject>(APassiveGameObject::StaticClass(), SpawnInfo);
-	TSharedPtr<APassiveGameObject> Passive = MakeShareable(NewPassive);
-	Passive->Init(EPassiveObjType::TEST);
-	PassiveObject.Add(Passive);
+	NewPassive->Init(EPassiveObjType::TEST);
 }
 
 void AGameLevel::EndPlay(const EEndPlayReason::Type EndPlayReason)

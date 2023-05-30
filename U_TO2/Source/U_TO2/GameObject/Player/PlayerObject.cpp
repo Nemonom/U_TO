@@ -60,10 +60,6 @@ void APlayerObject::PostInitializeComponents()
 
 	Anim->OnMontageEnded.AddDynamic(this, &APlayerObject::OnAttackMontageEnded);
 
-		Anim->OnNextAttackCheck.AddLambda([this]() -> void {
-		UE_LOG(LogTemp, Warning, TEXT("OnNextAttackCheck %d"), CurrentCombo);
-	});
-
 	Anim->OnNextAttackCheck.AddLambda([this]() -> void {
 		CanNextCombo = false;
 		if (IsComboInputOn)
@@ -199,7 +195,8 @@ void APlayerObject::Attack()
 {
 	if (IsAttacking)
 	{
-		IsComboInputOn = CanNextCombo;
+		if (CanNextCombo)
+			IsComboInputOn = true;
 	}
 	else
 	{

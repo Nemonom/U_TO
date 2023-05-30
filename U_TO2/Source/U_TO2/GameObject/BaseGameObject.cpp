@@ -40,22 +40,17 @@ void ABaseGameObject::Init()
 
 APassiveGameObject::APassiveGameObject()
 {
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_CARDBOARD(TEXT("/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"));
+	if (SK_CARDBOARD.Succeeded())
+		GetMesh()->SetSkeletalMesh(SK_CARDBOARD.Object);
+
+	GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, 0), FRotator(0, 0, 0));
 }
 
 void APassiveGameObject::Init(EPassiveObjType Type)
 {
-	ObjType = Type;
-
-	USkeletalMesh* SkeletalMesh = LoadObject<USkeletalMesh>(nullptr, TEXT("/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Robo.SK_CharM_Robo"));
-	if (SkeletalMesh)
-		GetMesh()->SetSkeletalMesh(SkeletalMesh);
-
-	GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
-	GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, 0), FRotator(0, 0, 0));
-
-	UAnimInstance* Anim = LoadObject<UAnimInstance>(nullptr, TEXT("/Game/WarriorAnimBlueprint.WarriorAnimBlueprint_C"));
-	if (Anim)
-		GetMesh()->SetAnimInstanceClass(Anim->GetClass());
+	ObjType = Type;	
 }
 
 void APassiveGameObject::BeginPlay()
