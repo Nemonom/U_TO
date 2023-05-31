@@ -54,7 +54,7 @@ void AEnemyObject::Init(EObjType Type)
 
 	int PosRange = ObjType == EObjType::BOSS ? 10 : 300;
 
-	FString MeshPath;
+	//FString MeshPath;
 
 	//if (ObjType == EObjType::BOSS)
 	//	MeshPath = TEXT("/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Warrior.SK_CharM_Warrior");
@@ -67,14 +67,14 @@ void AEnemyObject::Init(EObjType Type)
 
 	//GetMesh()->SetAnimationMode(EAnimationMode::AnimationSingleNode);
 
-	MeshPath = TEXT("/Game/WarriorAnimBlueprint.WarriorAnimBlueprint");
+	//MeshPath = TEXT("/Game/WarriorAnimBlueprint.WarriorAnimBlueprint");
 
 	//auto test = Cast<UAnimInstance>(LoadObject<UObject>(NULL, *MeshPath));
 	//UAnimInstance* AniInstance = test;
 	//if (AniInstance)
 	//	GetMesh()->SetAnimInstanceClass(AniInstance->GetClass());
-	UAnimationAsset* test = LoadObject<UAnimationAsset>(NULL, *MeshPath);
-	GetMesh()->PlayAnimation(test, true);
+	//UAnimationAsset* test = LoadObject<UAnimationAsset>(NULL, *MeshPath);
+	//GetMesh()->PlayAnimation(test, true);
 
 	RootComponent->SetRelativeLocationAndRotation(FVector(rand() % PosRange, rand() % PosRange, rand() % PosRange), FRotator(0, 0, 0));
 	

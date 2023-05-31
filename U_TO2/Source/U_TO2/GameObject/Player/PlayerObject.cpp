@@ -4,7 +4,6 @@
 #include "PlayerObject.h"
 #include "../../Ani/PlayerAnimInstance.h"
 #include "../../Weapon/WeaponObject.h"
-#include "DrawDebugHelpers.h"
 #include "../CharacterStatComponent.h"
 
 APlayerObject::APlayerObject()
@@ -12,12 +11,25 @@ APlayerObject::APlayerObject()
 	ObjType = EObjType::PLAYER;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SPRINGARM"));
-	SpringArm->TargetArmLength = 400.f;
-	SpringArm->SetRelativeRotation(FRotator(-15.f, 0.f, 0.f));
-	SpringArm->SetupAttachment(GetCapsuleComponent());
+	SpringArm->SetupAttachment(RootComponent);
+	SpringArm->SetRelativeRotation(FRotator::ZeroRotator);
+	SpringArm->TargetArmLength = 400.f; 
+	SpringArm->bUsePawnControlRotation = true;
+	SpringArm->bInheritPitch = true;
+	SpringArm->bInheritRoll = true;
+	SpringArm->bInheritYaw = true;
+	SpringArm->bDoCollisionTest = true;
+	SpringArm->bEnableCameraLag = true;
+	SpringArm->CameraLagSpeed = 3.0f;
 
-	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
-	Camera->SetupAttachment(SpringArm);
+	ThirdPersonCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("CAMERA"));
+	ThirdPersonCamera->SetupAttachment(SpringArm);
+
+	FirstPersonCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+	FirstPersonCamera->SetupAttachment(GetCapsuleComponent());
+	FirstPersonCamera->SetRelativeLocation(FVector(0.0f, 0.0f, BaseEyeHeight));
+	FirstPersonCamera->bUsePawnControlRotation = true;
+	FirstPersonCamera->SetActive(false);
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 
@@ -33,9 +45,11 @@ APlayerObject::APlayerObject()
 
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("PlayerObject"));
 
-	SetControlMode(0);
 
-	GetCharacterMovement()->JumpZVelocity = 800.f;
+	SetControlMode(EViewMode::THIRD);
+
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
+	GetCharacterMovement()->JumpZVelocity = 600.f;
 
 	AttackEndComboState();
 
@@ -48,6 +62,7 @@ APlayerObject::APlayerObject()
 void APlayerObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 }
 
 void APlayerObject::PostInitializeComponents()
@@ -68,7 +83,7 @@ void APlayerObject::PostInitializeComponents()
 			UE_LOG(LogTemp, Warning, TEXT("JumpToAttackMontageSection %d"), CurrentCombo);
 			Anim->JumpToAttackMontageSection(CurrentCombo);
 		}
-	});
+		});
 
 
 	Anim->OnAttackHitCheck.AddUObject(this, &APlayerObject::AttackCheck);
@@ -76,22 +91,16 @@ void APlayerObject::PostInitializeComponents()
 
 	CharacterStat->OnHPIsZero.AddLambda([this]() -> void {
 		Die();
-	});
+		});
 }
 
 void APlayerObject::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &APlayerObject::GoForward);
-	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &APlayerObject::LeftRight);
-	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APlayerObject::LookUp);
-	PlayerInputComponent->BindAxis(TEXT("Rotate"), this, &APlayerObject::Rotate);
-
 	PlayerInputComponent->BindAction(TEXT("ChangeView"), EInputEvent::IE_Pressed, this, &APlayerObject::ChangeView);
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &APlayerObject::Attack);
-
 }
 
 void APlayerObject::PossessedBy(AController* NewController)
@@ -102,7 +111,7 @@ void APlayerObject::PossessedBy(AController* NewController)
 float APlayerObject::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	const float ActualDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	
+
 	CharacterStat->SetDamage(ActualDamage);
 
 	return ActualDamage;
@@ -118,11 +127,16 @@ void APlayerObject::BeginPlay()
 	Super::BeginPlay();
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerObject::OnBeginOverlap);
+
+	if (IsPlayerControlled())
+	{
+		EnableInput(Cast<APlayerController>(GetController()));
+	}
 }
 
 void APlayerObject::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("coll"));
+	UE_LOG(LogTemp, Warning, TEXT("collision"));
 }
 
 void APlayerObject::SetWeapon(AWeaponObject* NewWeapon)
@@ -142,53 +156,47 @@ void APlayerObject::Die()
 	Super::Die();
 }
 
-void APlayerObject::SetControlMode(int32 ControlMode)
+void APlayerObject::SetControlMode(EViewMode ControlMode)
 {
-	if (ControlMode == 0)
+	if (ControlMode == EViewMode::THIRD)
 	{
-		SpringArm->TargetArmLength = 450.0f;
 		SpringArm->SetRelativeRotation(FRotator::ZeroRotator);
-		SpringArm->bUsePawnControlRotation = true;
-		SpringArm->bInheritPitch = true;
-		SpringArm->bInheritRoll = true;
-		SpringArm->bInheritYaw = true;
-		SpringArm->bDoCollisionTest = true;
+
+		FirstPersonCamera->SetActive(false);
+		ThirdPersonCamera->SetActive(true);
+
 		bUseControllerRotationYaw = false;
+
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 		GetCharacterMovement()->bUseControllerDesiredRotation = true;
-		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
 	}
-}
+	else if (ControlMode == EViewMode::FIRST)
+	{
+		FirstPersonCamera->SetRelativeLocation(FVector(-250.0f, 0.0f, 150.0f));
+		FirstPersonCamera->bUsePawnControlRotation = true;
 
-void APlayerObject::GoForward(float AxisValue)
-{
-	AddMovementInput(FRotationMatrix(FRotator(0.0f, GetControlRotation().Yaw, 0.0f)).GetUnitAxis(EAxis::X), AxisValue);
-}
+		FirstPersonCamera->SetActive(true);
+		ThirdPersonCamera->SetActive(false);
 
-void APlayerObject::LeftRight(float AxisValue)
-{
-	AddMovementInput(FRotationMatrix(FRotator(0.0f, GetControlRotation().Yaw, 0.0f)).GetUnitAxis(EAxis::Y), AxisValue);
-}
+		bUseControllerRotationYaw = true;
 
-void APlayerObject::LookUp(float AxisValue)
-{
-	AddControllerPitchInput(AxisValue);
-}
-
-void APlayerObject::Rotate(float AxisValue)
-{
-	AddControllerYawInput(AxisValue);
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	}
+	CurrentControlMode = ControlMode;
 }
 
 void APlayerObject::ChangeView()
 {
-	//switch (CurrentControlMode)
-	//{
-	//case EViewMode::THIRD:
-	//	GetController()->SetControlRotation(GetActorRotation());
-	//	SetControlMode(EViewMode::FIRST);
-	//	break;
-	//}
+	switch (CurrentControlMode)
+	{
+	case EViewMode::THIRD:
+		SetControlMode(EViewMode::FIRST);
+		break;
+	case EViewMode::FIRST:
+		SetControlMode(EViewMode::THIRD);
+		break;
+	}
 }
 
 void APlayerObject::Attack()

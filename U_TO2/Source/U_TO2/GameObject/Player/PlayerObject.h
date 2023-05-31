@@ -8,7 +8,7 @@
 #include "PlayerObject.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class U_TO2_API APlayerObject : public AActiveGameObject
@@ -32,7 +32,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Die() override;
 
-	void SetControlMode(int32 ControlMode);
+	void SetControlMode(EViewMode ControlMode);
 
 	UFUNCTION()
 		virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp
@@ -40,11 +40,6 @@ protected:
 
 
 private:
-	void GoForward(float AxisValue);
-	void LeftRight(float AxisValue);
-	void LookUp(float AxisValue);
-	void Rotate(float AxisValue);
-
 	void ChangeView();
 	void Attack();
 
@@ -61,12 +56,14 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
 		class USpringArmComponent* SpringArm;
 
-	UPROPERTY(VisibleAnywhere, Category = Camera)
-		class UCameraComponent* Camera;
-
 	UPROPERTY(VisibleAnywhere, Category = Weapon)
 		class AWeaponObject* Weapon;
 
+	UPROPERTY(VisibleAnywhere, Category = Camera)
+		UCameraComponent* ThirdPersonCamera;
+
+	UPROPERTY(VisibleAnywhere, Category = Camera)
+		UCameraComponent* FirstPersonCamera;
 private:
 	UPROPERTY()
 		class UPlayerAnimInstance* Anim{ nullptr };
@@ -81,7 +78,7 @@ private:
 		bool IsComboInputOn{ false };
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
-		int32 CurrentCombo{ 0 };
+		int32 CurrentCombo { 0 };
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 		int32 MaxCombo { 4 };
@@ -95,4 +92,6 @@ private:
 	EViewMode CurrentControlMode{ EViewMode::THIRD };
 
 	bool IsUsingDash{ false };
+
+	FVector2D CameraInput;
 };

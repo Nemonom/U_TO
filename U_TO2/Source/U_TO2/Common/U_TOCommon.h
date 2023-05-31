@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine.h"
+#include "DrawDebugHelpers.h"
 
 enum class EScene
 {
@@ -62,4 +63,9 @@ enum class EPassiveObjType
 {
 	TEST,
 	ITEM
+};
+
+enum class ESpringArmLength
+{
+	THIRD_PERSON = 600,
 };
