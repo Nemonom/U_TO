@@ -25,6 +25,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void Die() override;
+	void Fire();
 
 public:
 	UPROPERTY(VisibleAnywhere, Category = Effect)

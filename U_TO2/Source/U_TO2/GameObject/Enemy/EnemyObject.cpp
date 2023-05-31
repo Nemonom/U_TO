@@ -76,7 +76,7 @@ void AEnemyObject::Init(EObjType Type)
 	//UAnimationAsset* test = LoadObject<UAnimationAsset>(NULL, *MeshPath);
 	//GetMesh()->PlayAnimation(test, true);
 
-	RootComponent->SetRelativeLocationAndRotation(FVector(rand() % PosRange, rand() % PosRange, rand() % PosRange), FRotator(0, 0, 0));
+	RootComponent->SetRelativeLocationAndRotation(FVector(rand() % PosRange, rand() % PosRange, 0), FRotator(0, 0, 0));
 	
 	Super::Init(Type);
 }
