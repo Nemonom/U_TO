@@ -1,6 +1,7 @@
 #include "EnemyObject.h"
 #include "../CharacterStatComponent.h"
 #include "../../Ani/PlayerAnimInstance.h"
+#include "../Projectile/Machine/WaveMachine.h"
 
 AEnemyObject::AEnemyObject()
 {
@@ -28,7 +29,9 @@ AEnemyObject::AEnemyObject()
 		Effect->bAutoActivate = false;
 	}
 
-
+	AttackMachine = new WaveMachine();
+	AttackMachine->SetWorld(GetWorld());
+	AttackMachine->SetPos(GetActorLocation());
 }
 
 
@@ -46,6 +49,8 @@ void AEnemyObject::PostInitializeComponents()
 void AEnemyObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	AttackMachine->Tick(DeltaTime);
 }
 
 void AEnemyObject::Init(EObjType Type)
@@ -77,7 +82,7 @@ void AEnemyObject::Init(EObjType Type)
 	//GetMesh()->PlayAnimation(test, true);
 
 	RootComponent->SetRelativeLocationAndRotation(FVector(rand() % PosRange, rand() % PosRange, 0), FRotator(0, 0, 0));
-	
+
 	Super::Init(Type);
 }
 

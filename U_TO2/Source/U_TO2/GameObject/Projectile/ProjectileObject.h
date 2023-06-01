@@ -22,8 +22,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
-		USphereComponent* CollisionComponent;
+	UPROPERTY(VisibleAnywhere)
+		UStaticMeshComponent* MeshComponent;
+
+	//UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
+	//	USphereComponent* CollisionComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = Movement)
 		UProjectileMovementComponent* ProjectileMovementComponent;

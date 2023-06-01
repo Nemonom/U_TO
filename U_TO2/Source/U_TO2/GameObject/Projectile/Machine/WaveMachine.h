@@ -12,5 +12,11 @@ class U_TO2_API WaveMachine : public Machine
 {
 public:
 	WaveMachine();
-	~WaveMachine();
+	virtual ~WaveMachine();
+
+	virtual void Tick(float DeltaTime) override;
+
+protected:
+	const float m_Maxtime{ 1.5f };
+	float m_Ctime{ 0.f };
 };

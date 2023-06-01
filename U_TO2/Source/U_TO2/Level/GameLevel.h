@@ -19,5 +19,5 @@ protected:
 
 private:
 	class EnemyManager* EnemyManager_;
-	TArray<TSharedPtr<class APassiveGameObject>> PassiveObject;
+	TArray<TWeakObjectPtr<class APassiveGameObject>> PassiveObject;
 };

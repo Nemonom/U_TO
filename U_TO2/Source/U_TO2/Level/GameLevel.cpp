@@ -19,6 +19,8 @@ void AGameLevel::BeginPlay()
 
 	APassiveGameObject* NewPassive = GetWorld()->SpawnActor<APassiveGameObject>(APassiveGameObject::StaticClass(), SpawnInfo);
 	NewPassive->Init(EPassiveObjType::TEST);
+
+	PassiveObject.Add(NewPassive);
 }
 
 void AGameLevel::EndPlay(const EEndPlayReason::Type EndPlayReason)

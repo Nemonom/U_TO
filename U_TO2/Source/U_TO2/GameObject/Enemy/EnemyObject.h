@@ -11,7 +11,7 @@ UCLASS()
 class U_TO2_API AEnemyObject : public AActiveGameObject
 {
 	GENERATED_BODY()
-	
+
 public:
 	AEnemyObject();
 
@@ -34,4 +34,6 @@ public:
 private:
 	UPROPERTY()
 		class UPlayerAnimInstance* Anim{ nullptr };
+
+	class Machine* AttackMachine{ nullptr };
 };

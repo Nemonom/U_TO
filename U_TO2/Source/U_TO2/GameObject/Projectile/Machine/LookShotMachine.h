@@ -11,5 +11,5 @@ class U_TO2_API LookShotMachine	: public Machine
 {
 public:
 	LookShotMachine();
-	~LookShotMachine();
+	virtual ~LookShotMachine();
 };
