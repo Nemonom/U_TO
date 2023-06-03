@@ -69,3 +69,10 @@ enum class ESpringArmLength
 {
 	THIRD_PERSON = 600,
 };
+
+enum class ESectionState : uint8
+{
+	READY = 0,
+	BATTLE,
+	COMPLETE
+};
