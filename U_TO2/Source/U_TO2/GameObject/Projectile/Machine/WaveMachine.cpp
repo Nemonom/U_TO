@@ -25,9 +25,12 @@ void WaveMachine::Tick(float DeltaTime)
 		for (int i = 0; i < 5; i++)
 		{
 			AProjectileObject* NewProjectile = World->SpawnActor<AProjectileObject>(AProjectileObject::StaticClass(), BasePos, FRotator::ZeroRotator, SpawnInfo);
-			FVector dir{ (rand() % 10 - 5) * 1.f, (rand() % 10 - 5) * 1.f, (rand() % 10 - 5) * 1.f };
-			NewProjectile->FireInDirection(dir.GetSafeNormal());
-			ProjectileArray.Add(NewProjectile);
+			if (NewProjectile)
+			{
+				FVector dir{ (rand() % 10 - 5) * 1.f, (rand() % 10 - 5) * 1.f, (rand() % 10 - 5) * 1.f };
+				NewProjectile->FireInDirection(dir.GetSafeNormal());
+				ProjectileArray.Add(NewProjectile);
+			}
 		}
 	}
 }

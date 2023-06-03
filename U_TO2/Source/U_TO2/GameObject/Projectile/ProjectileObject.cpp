@@ -1,9 +1,8 @@
 #include "ProjectileObject.h"
+#include "../Player/PlayerObject.h"
 
-// Sets default values
 AProjectileObject::AProjectileObject()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
@@ -11,12 +10,14 @@ AProjectileObject::AProjectileObject()
 	if (Mesh.Succeeded())
 		MeshComponent->SetStaticMesh(Mesh.Object);
 	MeshComponent->SetCollisionProfileName(TEXT("Projectile"));
-	SetRootComponent(MeshComponent);
 
-	/*CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
-	CollisionComponent->InitSphereRadius(15.0f);
-	CollisionComponent->SetCollisionProfileName(TEXT("Projectile"));
-	CollisionComponent->SetupAttachment(MeshComponent);*/
+
+	MeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); // 충돌 처리 활성화
+	MeshComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic); // 충돌 그룹 설정
+	//MeshComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block); // 충돌 반응 설정
+	
+
+	SetRootComponent(MeshComponent);
 
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	ProjectileMovementComponent->SetUpdatedComponent(MeshComponent);
@@ -24,13 +25,24 @@ AProjectileObject::AProjectileObject()
 	ProjectileMovementComponent->MaxSpeed = 300.0f;
 	ProjectileMovementComponent->bRotationFollowsVelocity = true;
 	ProjectileMovementComponent->bShouldBounce = false;
+	ProjectileMovementComponent->ProjectileGravityScale = 0.f;
 	ProjectileMovementComponent->SetActive(true);
+
+	InitialLifeSpan = 3.0f;
 }
 
 void AProjectileObject::BeginPlay()
 {
 	Super::BeginPlay();
+	MeshComponent->OnComponentBeginOverlap.AddDynamic(this, &AProjectileObject::OnBeginOverlap);
+}
 
+void AProjectileObject::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor && OtherActor->IsA(APlayerObject::StaticClass()))
+	{
+		Destroy();
+	}
 }
 
 void AProjectileObject::FireInDirection(const FVector& ShootDirection)
