@@ -3,7 +3,7 @@
 
 AProjectileObject::AProjectileObject()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("/Game/InfinityBladeGrassLands/Environments/Breakables/StaticMesh/Objects/SM_Env_Breakables_GroupLg.SM_Env_Breakables_GroupLg"));
@@ -41,6 +41,9 @@ void AProjectileObject::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 {
 	if (OtherActor && OtherActor->IsA(APlayerObject::StaticClass()))
 	{
+		FDamageEvent DamageEvent;
+		OtherActor->TakeDamage(1.f, DamageEvent, GetInstigatorController(), this);
+
 		Destroy();
 	}
 }
