@@ -14,9 +14,12 @@ public:
 	// Sets default values for this actor's properties
 	ASection();
 
+	void SetBattleSection(bool bIsBattleSection);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 private:
 	void SetState(ESectionState NewState);
@@ -50,4 +53,6 @@ private:
 		bool IsBattleSection{ false };
 
 	ESectionState CurrentState{ ESectionState::READY };
+
+	class EnemyManager* EnemyManager_{ nullptr };
 };

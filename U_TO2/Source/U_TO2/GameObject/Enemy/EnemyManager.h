@@ -8,19 +8,19 @@
 class U_TO2_API EnemyManager
 {
 public:
-	EnemyManager(UWorld* InputWorld);
+	EnemyManager(UWorld* InputWorld, FVector FActorLocation);
 	~EnemyManager();
 
-	void Tick(float DeltaTime);
-
-	void CreateEnemy(int cnt);
+private:
+	void CreateEnemy();
 
 private:
-	TArray<TSharedPtr<class AEnemyObject>> Enemys;
-	float Timer{ 0.f };
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
-		int CreateEnemyTimer{ 30 };
-
 	UWorld* World{ nullptr };
+	
+	TArray<TSharedPtr<class AEnemyObject>> Enemys;
+
+	FVector ActorLocation{ FVector::ZeroVector };
+	float CreateEnemyTime{ 30.f };
+	FTimerHandle MyTimerHandle = { };
+	int CreateEnemyNum{ 3 };
 };

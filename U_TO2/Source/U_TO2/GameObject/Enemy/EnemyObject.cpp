@@ -57,7 +57,6 @@ void AEnemyObject::Init(EObjType Type)
 {
 	ObjType = Type;
 
-	int PosRange = ObjType == EObjType::BOSS ? 10 : 300;
 
 	//FString MeshPath;
 
@@ -81,9 +80,14 @@ void AEnemyObject::Init(EObjType Type)
 	//UAnimationAsset* test = LoadObject<UAnimationAsset>(NULL, *MeshPath);
 	//GetMesh()->PlayAnimation(test, true);
 
-	RootComponent->SetRelativeLocationAndRotation(FVector(rand() % PosRange, rand() % PosRange, 0), FRotator(0, 0, 0));
-
 	Super::Init(Type);
+}
+
+void AEnemyObject::SetPos(FVector ActorLocation)
+{
+	int PosRange = ObjType == EObjType::BOSS ? 10 : 300;
+	RootComponent->SetRelativeLocationAndRotation(FVector(ActorLocation.X + rand() % PosRange, ActorLocation.Y + rand() % PosRange, ActorLocation.Z + 70.f), FRotator::ZeroRotator);
+	AttackMachine->SetPos(GetActorLocation());
 }
 
 float AEnemyObject::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

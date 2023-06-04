@@ -19,13 +19,13 @@ public:
 	virtual void PostInitializeComponents() override;
 
 	virtual void Init(EObjType Type) override;
+	void SetPos(FVector ActorLocation);
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
 	virtual void BeginPlay() override;
 	virtual void Die() override;
-	void Fire();
 
 public:
 	UPROPERTY(VisibleAnywhere, Category = Effect)

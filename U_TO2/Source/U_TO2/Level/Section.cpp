@@ -1,4 +1,6 @@
 #include "Section.h"
+#include "../../U_TO2/GameObject/Enemy/EnemyManager.h"
+#include "../../U_TO2/GameObject/Player/PlayerObject.h"
 
 // Sets default values
 ASection::ASection()
@@ -60,6 +62,11 @@ ASection::ASection()
 
 }
 
+void ASection::SetBattleSection(bool bIsBattleSection)
+{
+	IsBattleSection = bIsBattleSection;
+}
+
 // Called when the game starts or when spawned
 void ASection::BeginPlay()
 {
@@ -75,6 +82,8 @@ void ASection::SetState(ESectionState NewState)
 	{
 	case ESectionState::READY:
 	{
+		EnemyManager_ = nullptr;
+
 		Trigger->SetCollisionProfileName(TEXT("GateTrigger"));
 		for (UBoxComponent* GateTrigger : GateTriggers)
 		{
@@ -86,6 +95,8 @@ void ASection::SetState(ESectionState NewState)
 	break;
 	case ESectionState::BATTLE:
 	{
+		EnemyManager_ = new EnemyManager(GetWorld(), Mesh->GetComponentLocation());
+		
 		Trigger->SetCollisionProfileName(TEXT("NoCollision"));
 		for (UBoxComponent* GateTrigger : GateTriggers)
 		{
@@ -104,6 +115,8 @@ void ASection::SetState(ESectionState NewState)
 	break;
 	case ESectionState::COMPLETE:
 	{
+		EnemyManager_ = nullptr;
+	
 		Trigger->SetCollisionProfileName(TEXT("NoCollision"));
 		for (UBoxComponent* GateTrigger : GateTriggers)
 		{
@@ -128,8 +141,11 @@ void ASection::OperateGates(bool bOpen)
 
 void ASection::OnTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	ESectionState TempState = IsBattleSection ? ESectionState::BATTLE : ESectionState::COMPLETE;
-	SetState(TempState);
+	if (OtherActor->IsA(APlayerObject::StaticClass()))
+	{
+		ESectionState TempState = IsBattleSection ? ESectionState::BATTLE : ESectionState::COMPLETE;
+		SetState(TempState);
+	}
 }
 
 void ASection::OnGateTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -156,6 +172,7 @@ void ASection::OnGateTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponen
 	if (!bResult)
 	{
 		auto NewSection = GetWorld()->SpawnActor<ASection>(NewLocation, FRotator::ZeroRotator);
+		NewSection->SetBattleSection(true);
 	}
 	else
 	{
@@ -163,10 +180,15 @@ void ASection::OnGateTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponen
 	}
 }
 
+void ASection::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	EnemyManager_ = nullptr;
+}
+
 // Called every frame
 void ASection::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
