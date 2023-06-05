@@ -60,6 +60,7 @@ ASection::ASection()
 		NewGateTrigger->ComponentTags.Add(GateSocket);
 	}
 
+	EnemyManager_ = nullptr;
 }
 
 void ASection::SetBattleSection(bool bIsBattleSection)
@@ -82,7 +83,9 @@ void ASection::SetState(ESectionState NewState)
 	{
 	case ESectionState::READY:
 	{
-		EnemyManager_ = nullptr;
+		EnemyManager_ = new EnemyManager(GetWorld(), Mesh->GetComponentLocation());
+		//EnemyManager_ = nullptr;
+	//	EnemyManager_ = new EnemyManager(GetWorld(), Mesh->GetComponentLocation());
 
 		Trigger->SetCollisionProfileName(TEXT("GateTrigger"));
 		for (UBoxComponent* GateTrigger : GateTriggers)
@@ -96,7 +99,10 @@ void ASection::SetState(ESectionState NewState)
 	case ESectionState::BATTLE:
 	{
 		EnemyManager_ = new EnemyManager(GetWorld(), Mesh->GetComponentLocation());
+		//EnemyManager_ = MakeShared<EnemyManager>(GetWorld(), Mesh->GetComponentLocation());
 		
+		// playerÇÑÅ×µµ set
+
 		Trigger->SetCollisionProfileName(TEXT("NoCollision"));
 		for (UBoxComponent* GateTrigger : GateTriggers)
 		{
@@ -115,7 +121,8 @@ void ASection::SetState(ESectionState NewState)
 	break;
 	case ESectionState::COMPLETE:
 	{
-		EnemyManager_ = nullptr;
+		//delete EnemyManager_;
+		//EnemyManager_ = nullptr;
 	
 		Trigger->SetCollisionProfileName(TEXT("NoCollision"));
 		for (UBoxComponent* GateTrigger : GateTriggers)
@@ -183,6 +190,9 @@ void ASection::OnGateTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponen
 void ASection::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
+
+
+	delete EnemyManager_;
 	EnemyManager_ = nullptr;
 }
 

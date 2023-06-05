@@ -6,11 +6,17 @@ AProjectileObject::AProjectileObject()
 	PrimaryActorTick.bCanEverTick = false;
 
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("/Game/InfinityBladeGrassLands/Environments/Breakables/StaticMesh/Objects/SM_Env_Breakables_GroupLg.SM_Env_Breakables_GroupLg"));
+	
+	FString MeshClassPath = "/Engine/BasicShapes/Cube";
+	//FString MeshClassPath = "/Game/InfinityBladeGrassLands/Environments/Breakables/StaticMesh/Objects/SM_Env_Breakables_GroupLg.SM_Env_Breakables_GroupLg";
+	ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(*MeshClassPath);
 	if (Mesh.Succeeded())
 		MeshComponent->SetStaticMesh(Mesh.Object);
 	MeshComponent->SetCollisionProfileName(TEXT("Projectile"));
 
+	// 새로운 크기를 설정할 벡터를 생성합니다.
+	FVector NewScale = FVector(0.5f, 0.5f, 0.5f); // X, Y, Z 축 방향으로 2배로 확대
+	MeshComponent->SetWorldScale3D(NewScale);
 
 	MeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); // 충돌 처리 활성화
 	MeshComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic); // 충돌 그룹 설정

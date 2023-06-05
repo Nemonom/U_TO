@@ -10,11 +10,16 @@ EnemyManager::EnemyManager(UWorld* InputWorld, FVector FActorLocation) : World(I
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	AEnemyObject* NewEnemy = World->SpawnActor<AEnemyObject>(AEnemyObject::StaticClass(), SpawnInfo);
-	TSharedPtr<AEnemyObject> Enemy = MakeShareable(NewEnemy);
-	Enemy->Init(EObjType::BOSS);
-	Enemy->SetPos(ActorLocation);
-	Enemys.Add(Enemy);
+	//AEnemyObject* NewEnemy = World->SpawnActor<AEnemyObject>(AEnemyObject::StaticClass(), SpawnInfo);
+	//TSharedPtr<AEnemyObject> Enemy = MakeShareable(NewEnemy);
+	//Enemy->Init(EObjType::BOSS);
+	//Enemy->SetPos(ActorLocation);
+	//Enemys.Add(Enemy);
+
+	TSharedPtr<AEnemyObject> NewEnemy = MakeShareable(NewObject<AEnemyObject>());
+	NewEnemy->Init(EObjType::BOSS); 
+	NewEnemy->SetPos(ActorLocation);
+	Enemys.Add(NewEnemy);
 
 	World->GetTimerManager().SetTimer(MyTimerHandle, FTimerDelegate::CreateLambda([this]() -> void
 		{

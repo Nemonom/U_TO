@@ -3,7 +3,7 @@
 
 #include "LookShotMachine.h"
 
-LookShotMachine::LookShotMachine()
+LookShotMachine::LookShotMachine(UWorld* InputWorld) : Machine(InputWorld)
 {
 }
 

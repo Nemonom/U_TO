@@ -29,11 +29,15 @@ AEnemyObject::AEnemyObject()
 		Effect->bAutoActivate = false;
 	}
 
-	AttackMachine = new WaveMachine();
-	AttackMachine->SetWorld(GetWorld());
+	AttackMachine = new WaveMachine(GetWorld());
 	AttackMachine->SetPos(GetActorLocation());
 }
 
+AEnemyObject::~AEnemyObject()
+{
+	delete AttackMachine;
+	AttackMachine = nullptr;
+}
 
 void AEnemyObject::PostInitializeComponents()
 {
@@ -49,8 +53,6 @@ void AEnemyObject::PostInitializeComponents()
 void AEnemyObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	AttackMachine->Tick(DeltaTime);
 }
 
 void AEnemyObject::Init(EObjType Type)
@@ -87,7 +89,8 @@ void AEnemyObject::SetPos(FVector ActorLocation)
 {
 	int PosRange = ObjType == EObjType::BOSS ? 10 : 300;
 	RootComponent->SetRelativeLocationAndRotation(FVector(ActorLocation.X + rand() % PosRange, ActorLocation.Y + rand() % PosRange, ActorLocation.Z + 70.f), FRotator::ZeroRotator);
-	AttackMachine->SetPos(GetActorLocation());
+	if (AttackMachine)
+		AttackMachine->SetPos(GetActorLocation());
 }
 
 float AEnemyObject::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

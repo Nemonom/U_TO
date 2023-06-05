@@ -14,6 +14,7 @@ class U_TO2_API AEnemyObject : public AActiveGameObject
 
 public:
 	AEnemyObject();
+	virtual ~AEnemyObject();
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void PostInitializeComponents() override;
