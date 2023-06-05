@@ -83,8 +83,7 @@ void ASection::SetState(ESectionState NewState)
 	{
 	case ESectionState::READY:
 	{
-		EnemyManager_ = new EnemyManager(GetWorld(), Mesh->GetComponentLocation());
-		//EnemyManager_ = nullptr;
+		EnemyManager_ = nullptr;
 	//	EnemyManager_ = new EnemyManager(GetWorld(), Mesh->GetComponentLocation());
 
 		Trigger->SetCollisionProfileName(TEXT("GateTrigger"));
@@ -191,8 +190,6 @@ void ASection::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 
-
-	delete EnemyManager_;
 	EnemyManager_ = nullptr;
 }
 
