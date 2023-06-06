@@ -36,6 +36,7 @@ void EnemyManager::CreateEnemy()
 		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 		AEnemyObject* NewEnemy = World->SpawnActor<AEnemyObject>(AEnemyObject::StaticClass(), SpawnInfo);
+		//  AMyActor* pActor = GetWorld()->SpawnActorDeferred<AMyActor>(MyActorTemplate, GetActorLocation(), SpawnRotation); 
 		NewEnemy->Init(EObjType::ENEMY);
 		NewEnemy->SetPos(ActorLocation);
 		Enemys.Add(NewEnemy);

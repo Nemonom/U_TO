@@ -14,6 +14,9 @@ public:
 	void SetPos(const FVector& Pos);
 
 protected:
+	virtual void CreateProjectile();
+
+protected:
 	UWorld* World{ nullptr };
 
 	TArray<TWeakObjectPtr<class AProjectileObject>> ProjectileArray;

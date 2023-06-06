@@ -3,16 +3,15 @@
 #include "CoreMinimal.h"
 #include "Machine.h"
 
-
-class U_TO2_API WaveMachine : public Machine
+class U_TO2_API AutoShot : public Machine
 {
 public:
-	WaveMachine(UWorld* InputWorld);
-	virtual ~WaveMachine();
+	AutoShot(UWorld* InputWorld);
+	virtual ~AutoShot();
 
 protected:
 	virtual void CreateProjectile() override;
 
 protected:
-	const float CreateTime{ 1.5f };
+	const float CreateTime{ 0.5f };
 };

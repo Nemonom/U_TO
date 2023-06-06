@@ -3,6 +3,10 @@
 
 #include "Machine.h"
 
+Machine::Machine()
+{
+}
+
 Machine::Machine(UWorld* InputWorld)
 {
 	World = InputWorld;
@@ -19,4 +23,8 @@ void Machine::Tick(float DeltaTime)
 void Machine::SetPos(const FVector& Pos)
 {
 	BasePos = Pos;
+}
+
+void Machine::CreateProjectile()
+{
 }

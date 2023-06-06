@@ -2,6 +2,7 @@
 #include "../CharacterStatComponent.h"
 #include "../../Ani/PlayerAnimInstance.h"
 #include "../Projectile/Machine/WaveMachine.h"
+#include "../Projectile/Machine/AutoShot.h"
 
 AEnemyObject::AEnemyObject()
 {
@@ -59,7 +60,16 @@ void AEnemyObject::Init(EObjType Type)
 {
 	ObjType = Type;
 
+	if (ObjType == EObjType::ENEMY)
+	{
+		FString	MeshPath = TEXT("/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Golden.SK_CharM_Golden");
+		USkeletalMesh* SkeletalMesh = LoadObject<USkeletalMesh>(nullptr, *MeshPath);
+		if (SkeletalMesh)
+			GetMesh()->SetSkeletalMesh(SkeletalMesh);
 
+		//AttackMachine = new WaveMachine(GetWorld());
+		//AttackMachine->SetPos(GetActorLocation());
+	}
 	//FString MeshPath;
 
 	//if (ObjType == EObjType::BOSS)
@@ -112,5 +122,9 @@ void AEnemyObject::BeginPlay()
 void AEnemyObject::Die()
 {
 	Anim->SetDeadAnim(true);
+	
+	delete AttackMachine;
+	AttackMachine = nullptr;
+
 	Super::Die();
 }
