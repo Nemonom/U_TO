@@ -10,8 +10,7 @@ EnemyManager::EnemyManager(UWorld* InputWorld, FVector FActorLocation) : World(I
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	AEnemyObject* NewEnemy = World->SpawnActor<AEnemyObject>(AEnemyObject::StaticClass(), SpawnInfo);
-	TSharedPtr<AEnemyObject> Enemy = MakeShareable(NewEnemy);
+	AEnemyObject* Enemy = World->SpawnActor<AEnemyObject>(AEnemyObject::StaticClass(), SpawnInfo);
 	Enemy->Init(EObjType::BOSS);
 	Enemy->SetPos(ActorLocation);
 	Enemys.Add(Enemy);
@@ -37,9 +36,8 @@ void EnemyManager::CreateEnemy()
 		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 		AEnemyObject* NewEnemy = World->SpawnActor<AEnemyObject>(AEnemyObject::StaticClass(), SpawnInfo);
-		TSharedPtr<AEnemyObject> Enemy = MakeShareable(NewEnemy);
-		Enemy->Init(EObjType::ENEMY);
-		Enemy->SetPos(ActorLocation);
-		Enemys.Add(Enemy);
+		NewEnemy->Init(EObjType::ENEMY);
+		NewEnemy->SetPos(ActorLocation);
+		Enemys.Add(NewEnemy);
 	}
 }

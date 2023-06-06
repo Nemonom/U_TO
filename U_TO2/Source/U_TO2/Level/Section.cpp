@@ -84,7 +84,6 @@ void ASection::SetState(ESectionState NewState)
 	case ESectionState::READY:
 	{
 		EnemyManager_ = nullptr;
-	//	EnemyManager_ = new EnemyManager(GetWorld(), Mesh->GetComponentLocation());
 
 		Trigger->SetCollisionProfileName(TEXT("GateTrigger"));
 		for (UBoxComponent* GateTrigger : GateTriggers)
@@ -98,7 +97,6 @@ void ASection::SetState(ESectionState NewState)
 	case ESectionState::BATTLE:
 	{
 		EnemyManager_ = new EnemyManager(GetWorld(), Mesh->GetComponentLocation());
-		//EnemyManager_ = MakeShared<EnemyManager>(GetWorld(), Mesh->GetComponentLocation());
 		
 		// playerÇÑÅ×µµ set
 
@@ -120,8 +118,8 @@ void ASection::SetState(ESectionState NewState)
 	break;
 	case ESectionState::COMPLETE:
 	{
-		//delete EnemyManager_;
-		//EnemyManager_ = nullptr;
+		delete EnemyManager_;
+		EnemyManager_ = nullptr;
 	
 		Trigger->SetCollisionProfileName(TEXT("NoCollision"));
 		for (UBoxComponent* GateTrigger : GateTriggers)
@@ -190,6 +188,7 @@ void ASection::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 
+	delete EnemyManager_;
 	EnemyManager_ = nullptr;
 }
 

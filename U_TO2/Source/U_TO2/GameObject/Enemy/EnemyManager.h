@@ -17,7 +17,7 @@ private:
 private:
 	UWorld* World{ nullptr };
 	
-	TArray<TSharedPtr<class AEnemyObject>> Enemys;
+	TArray<class AEnemyObject*> Enemys;
 
 	FVector ActorLocation{ FVector::ZeroVector };
 	float CreateEnemyTime{ 30.f };
