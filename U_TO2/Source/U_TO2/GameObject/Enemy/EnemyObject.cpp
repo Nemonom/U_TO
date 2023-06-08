@@ -30,7 +30,7 @@ AEnemyObject::AEnemyObject()
 		Effect->bAutoActivate = false;
 	}
 
-	AttackMachine = new WaveMachine(GetWorld());
+	AttackMachine = new WaveMachine(GetWorld(), EAttackType::ENEMY);
 	AttackMachine->SetPos(GetActorLocation());
 }
 
@@ -54,6 +54,11 @@ void AEnemyObject::PostInitializeComponents()
 void AEnemyObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (AttackMachine)
+	{
+		AttackMachine->SetPos(GetActorLocation());
+	}
 }
 
 void AEnemyObject::Init(EObjType Type)
@@ -67,7 +72,7 @@ void AEnemyObject::Init(EObjType Type)
 		if (SkeletalMesh)
 			GetMesh()->SetSkeletalMesh(SkeletalMesh);
 
-		AttackMachine = new AutoShot(GetWorld());
+		AttackMachine = new AutoShot(GetWorld(), EAttackType::ENEMY);
 		AttackMachine->SetPos(GetActorLocation());
 	}
 	//FString MeshPath;
@@ -123,6 +128,15 @@ void AEnemyObject::Die()
 {
 	Anim->SetDeadAnim(true);
 	
+	if (GetWorld())
+	{
+		GetWorld()->GetTimerManager().SetTimer(DestroyTimerHandle, FTimerDelegate::CreateLambda([this]() -> void
+			{
+				Destroy();
+			}
+		), 3.f, false);
+	}
+
 	delete AttackMachine;
 	AttackMachine = nullptr;
 

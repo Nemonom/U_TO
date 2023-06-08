@@ -2,7 +2,7 @@
 #include "../ProjectileObject.h"
 #include "../../Player/PlayerObject.h"
 
-AutoShot::AutoShot(UWorld* InputWorld) : Machine(InputWorld)
+AutoShot::AutoShot(UWorld* InputWorld, const EAttackType& InputAttackType) : Machine(InputWorld, InputAttackType)
 {
 	if (World)
 	{
@@ -16,6 +16,7 @@ AutoShot::AutoShot(UWorld* InputWorld) : Machine(InputWorld)
 
 AutoShot::~AutoShot()
 {
+	World->GetTimerManager().ClearTimer(ProjectileTimerHandle);
 }
 
 void AutoShot::CreateProjectile()
@@ -23,19 +24,23 @@ void AutoShot::CreateProjectile()
 	if (nullptr == World)
 		return;
 
-	FActorSpawnParameters SpawnInfo;
-	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	FTransform transform;
+	transform.SetTranslation(BasePos);
+	transform.SetRotation(FRotator::ZeroRotator.Quaternion());
 
-	AProjectileObject* NewProjectile = World->SpawnActor<AProjectileObject>(AProjectileObject::StaticClass(), BasePos, FRotator::ZeroRotator, SpawnInfo);
+	AProjectileObject* NewProjectile = World->SpawnActorDeferred<AProjectileObject>(AProjectileObject::StaticClass(), transform);
 	if (NewProjectile)
 	{
 		for (TActorIterator<APlayerObject> It(World); It; ++It)
 		{
 			APlayerObject* PlayerObj = *It;
-			FVector dir = PlayerObj->GetActorLocation() - BasePos;
-			NewProjectile->SetScale(FVector(0.2f, 0.2f, 0.2f));
+			FVector dir{ (rand() % 10 - 5) * 1.f, (rand() % 10 - 5) * 1.f, (rand() % 10 - 5) * 1.f };
+			NewProjectile->Init(AttackType);
+			NewProjectile->SetScale(FVector(0.4f, 0.4f, 0.4f));
 			NewProjectile->FireInDirection(dir.GetSafeNormal());
 			ProjectileArray.Add(NewProjectile);
 		}
+
+		UGameplayStatics::FinishSpawningActor(NewProjectile, transform);
 	}
 }

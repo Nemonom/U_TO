@@ -53,6 +53,12 @@ enum class EObjType
 	ENEMY
 };
 
+enum class EAttackType
+{
+	PLAYER,
+	ENEMY
+};
+
 enum class EWeaponType
 {
 	TEST1,

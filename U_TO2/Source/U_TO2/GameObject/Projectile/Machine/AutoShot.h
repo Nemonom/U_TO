@@ -6,7 +6,7 @@
 class U_TO2_API AutoShot : public Machine
 {
 public:
-	AutoShot(UWorld* InputWorld);
+	AutoShot(UWorld* InputWorld, const EAttackType& InputAttackType);
 	virtual ~AutoShot();
 
 protected:

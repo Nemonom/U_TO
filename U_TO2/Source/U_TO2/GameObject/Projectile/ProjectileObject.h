@@ -25,6 +25,7 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+	void Init(const EAttackType& InputAttackType);
 	void SetScale(const FVector& InputScale);
 	void SetSpeed(const float& InputSpeed);
 
@@ -34,4 +35,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Movement)
 		UProjectileMovementComponent* ProjectileMovementComponent;
+
+	EAttackType AttackType{ EAttackType::ENEMY };
 };

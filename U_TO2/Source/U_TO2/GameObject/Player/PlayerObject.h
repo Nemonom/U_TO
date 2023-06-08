@@ -17,6 +17,7 @@ class U_TO2_API APlayerObject : public AActiveGameObject
 
 public:
 	APlayerObject();
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void PostInitializeComponents() override;
@@ -94,4 +95,6 @@ private:
 	bool IsUsingDash{ false };
 
 	FVector2D CameraInput;
+
+	class Machine* AttackMachine{ nullptr };
 };

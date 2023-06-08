@@ -5,6 +5,7 @@
 #include "../../Ani/PlayerAnimInstance.h"
 #include "../../Weapon/WeaponObject.h"
 #include "../CharacterStatComponent.h"
+#include "../Projectile/Machine/LookShotMachine.h"
 
 APlayerObject::APlayerObject()
 {
@@ -56,13 +57,19 @@ APlayerObject::APlayerObject()
 	AttackRange = 200.0f;
 	AttackRadius = 50.0f;
 
-
+	AttackMachine = new LookShotMachine(GetWorld(), EAttackType::PLAYER);
+	AttackMachine->SetPos(GetActorLocation());
 }
 
 void APlayerObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (AttackMachine)
+	{
+		AttackMachine->SetPos(GetActorLocation());
+		AttackMachine->SetDir(GetActorRotation().Vector());
+	}
 }
 
 void APlayerObject::PostInitializeComponents()
@@ -134,6 +141,14 @@ void APlayerObject::BeginPlay()
 	}
 }
 
+void APlayerObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	if (AttackMachine)
+		AttackMachine->EndPlay();
+}
+
 void APlayerObject::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("collision"));
@@ -153,6 +168,10 @@ void APlayerObject::SetWeapon(AWeaponObject* NewWeapon)
 void APlayerObject::Die()
 {
 	Anim->SetDeadAnim(true);
+
+	delete AttackMachine;
+	AttackMachine = nullptr;
+
 	Super::Die();
 }
 

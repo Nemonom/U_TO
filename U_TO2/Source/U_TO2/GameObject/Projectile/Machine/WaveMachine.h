@@ -7,7 +7,7 @@
 class U_TO2_API WaveMachine : public Machine
 {
 public:
-	WaveMachine(UWorld* InputWorld);
+	WaveMachine(UWorld* InputWorld, const EAttackType& InputAttackType);
 	virtual ~WaveMachine();
 
 protected:

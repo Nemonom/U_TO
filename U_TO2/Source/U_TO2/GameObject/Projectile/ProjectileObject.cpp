@@ -1,5 +1,6 @@
 #include "ProjectileObject.h"
 #include "../Player/PlayerObject.h"
+#include "../Enemy/EnemyObject.h"
 
 AProjectileObject::AProjectileObject()
 {
@@ -40,12 +41,16 @@ void AProjectileObject::BeginPlay()
 
 void AProjectileObject::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor && OtherActor->IsA(APlayerObject::StaticClass()))
+	if (OtherActor)
 	{
-		FDamageEvent DamageEvent;
-		OtherActor->TakeDamage(1.f, DamageEvent, GetInstigatorController(), this);
+		if ((OtherActor->IsA(APlayerObject::StaticClass()) && AttackType == EAttackType::ENEMY)
+			|| (OtherActor->IsA(AEnemyObject::StaticClass()) && AttackType == EAttackType::PLAYER))
+		{
+			FDamageEvent DamageEvent;
+			OtherActor->TakeDamage(1.f, DamageEvent, GetInstigatorController(), this);
 
-		Destroy();
+			Destroy();
+		}
 	}
 }
 
@@ -60,6 +65,11 @@ void AProjectileObject::Tick(float DeltaTime)
 
 }
 
+void AProjectileObject::Init(const EAttackType& InputAttackType)
+{
+	AttackType = InputAttackType;
+}
+
 void AProjectileObject::SetScale(const FVector& InputScale)
 {
 	MeshComponent->SetWorldScale3D(InputScale);
@@ -69,4 +79,3 @@ void AProjectileObject::SetSpeed(const float& InputSpeed)
 {
 	ProjectileMovementComponent->InitialSpeed = InputSpeed;
 }
-

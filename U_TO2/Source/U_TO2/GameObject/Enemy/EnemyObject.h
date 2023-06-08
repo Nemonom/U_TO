@@ -37,4 +37,6 @@ private:
 		class UPlayerAnimInstance* Anim{ nullptr };
 
 	class Machine* AttackMachine{ nullptr };
+
+	FTimerHandle DestroyTimerHandle = { };
 };

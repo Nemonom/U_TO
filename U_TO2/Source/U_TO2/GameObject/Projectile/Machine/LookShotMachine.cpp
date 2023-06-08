@@ -1,12 +1,38 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "LookShotMachine.h"
+#include "../ProjectileObject.h"
+#include "../../Player/PlayerObject.h"
 
-LookShotMachine::LookShotMachine(UWorld* InputWorld) : Machine(InputWorld)
+LookShotMachine::LookShotMachine(UWorld* InputWorld, const EAttackType& InputAttackType) : Machine(InputWorld, InputAttackType)
 {
+	if (World)
+	{
+		World->GetTimerManager().SetTimer(ProjectileTimerHandle, FTimerDelegate::CreateLambda([this]() -> void
+			{
+				CreateProjectile();
+			}
+		), CreateTime, true, 3.f);
+	}
 }
 
 LookShotMachine::~LookShotMachine()
 {
+	World->GetTimerManager().ClearTimer(ProjectileTimerHandle);
+}
+
+void LookShotMachine::CreateProjectile()
+{
+	if (nullptr == World)
+		return;
+
+	FTransform transform;
+	transform.SetTranslation(BasePos);
+	transform.SetRotation(FRotator::ZeroRotator.Quaternion());
+
+	AProjectileObject* NewProjectile = World->SpawnActorDeferred<AProjectileObject>(AProjectileObject::StaticClass(), transform);
+	NewProjectile->Init(AttackType);
+	NewProjectile->SetScale(FVector(0.2f, 0.2f, 0.2f));
+	NewProjectile->FireInDirection(CustomDir.GetSafeNormal());
+	ProjectileArray.Add(NewProjectile);
+
+	UGameplayStatics::FinishSpawningActor(NewProjectile, transform);
 }
