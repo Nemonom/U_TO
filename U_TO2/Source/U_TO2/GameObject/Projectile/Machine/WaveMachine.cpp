@@ -23,12 +23,13 @@ void WaveMachine::CreateProjectile()
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		AProjectileObject* NewProjectile = World->SpawnActor<AProjectileObject>(AProjectileObject::StaticClass(), BasePos, FRotator::ZeroRotator, SpawnInfo);
 		if (NewProjectile)
 		{
 			FVector dir{ (rand() % 10 - 5) * 1.f, (rand() % 10 - 5) * 1.f, (rand() % 10 - 5) * 1.f };
+			NewProjectile->SetScale(FVector(0.4f, 0.4f, 0.4f));
 			NewProjectile->FireInDirection(dir.GetSafeNormal());
 			ProjectileArray.Add(NewProjectile);
 		}

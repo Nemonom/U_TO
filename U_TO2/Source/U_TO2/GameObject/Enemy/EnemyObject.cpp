@@ -67,8 +67,8 @@ void AEnemyObject::Init(EObjType Type)
 		if (SkeletalMesh)
 			GetMesh()->SetSkeletalMesh(SkeletalMesh);
 
-		//AttackMachine = new WaveMachine(GetWorld());
-		//AttackMachine->SetPos(GetActorLocation());
+		AttackMachine = new AutoShot(GetWorld());
+		AttackMachine->SetPos(GetActorLocation());
 	}
 	//FString MeshPath;
 

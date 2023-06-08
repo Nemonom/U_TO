@@ -13,11 +13,6 @@ AProjectileObject::AProjectileObject()
 	if (Mesh.Succeeded())
 		MeshComponent->SetStaticMesh(Mesh.Object);
 	MeshComponent->SetCollisionProfileName(TEXT("Projectile"));
-
-	// 새로운 크기를 설정할 벡터를 생성합니다.
-	FVector NewScale = FVector(0.5f, 0.5f, 0.5f); // X, Y, Z 축 방향으로 2배로 확대
-	MeshComponent->SetWorldScale3D(NewScale);
-
 	MeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics); // 충돌 처리 활성화
 	MeshComponent->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic); // 충돌 그룹 설정
 	//MeshComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block); // 충돌 반응 설정
@@ -27,8 +22,8 @@ AProjectileObject::AProjectileObject()
 
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	ProjectileMovementComponent->SetUpdatedComponent(MeshComponent);
-	ProjectileMovementComponent->InitialSpeed = 1000.0f;
-	ProjectileMovementComponent->MaxSpeed = 300.0f;
+	ProjectileMovementComponent->InitialSpeed = 300;
+	ProjectileMovementComponent->MaxSpeed = 1000.0f;
 	ProjectileMovementComponent->bRotationFollowsVelocity = true;
 	ProjectileMovementComponent->bShouldBounce = false;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.f;
@@ -63,5 +58,15 @@ void AProjectileObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AProjectileObject::SetScale(const FVector& InputScale)
+{
+	MeshComponent->SetWorldScale3D(InputScale);
+}
+
+void AProjectileObject::SetSpeed(const float& InputSpeed)
+{
+	ProjectileMovementComponent->InitialSpeed = InputSpeed;
 }
 

@@ -25,6 +25,9 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+	void SetScale(const FVector& InputScale);
+	void SetSpeed(const float& InputSpeed);
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* MeshComponent;

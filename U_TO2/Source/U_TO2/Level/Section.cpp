@@ -2,10 +2,8 @@
 #include "../../U_TO2/GameObject/Enemy/EnemyManager.h"
 #include "../../U_TO2/GameObject/Player/PlayerObject.h"
 
-// Sets default values
 ASection::ASection()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
@@ -68,12 +66,11 @@ void ASection::SetBattleSection(bool bIsBattleSection)
 	IsBattleSection = bIsBattleSection;
 }
 
-// Called when the game starts or when spawned
 void ASection::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetState(ESectionState::READY);
+	SetState(ESectionState::COMPLETE);
 }
 
 
@@ -107,8 +104,6 @@ void ASection::SetState(ESectionState NewState)
 		}
 
 		OperateGates(false);
-
-		//GetWorld()->GetTimerManager().SetTimer(SpawnNPCTimerHandle, FTimerDelegate::CreateUObject(this, &AABSection::OnNPCSpawn), EnemySpawnTime, false);
 
 		//GetWorld()->GetTimerManager().SetTimer(SpawnItemBoxTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
 		//	FVector2D RandXY = FMath::RandPointInCircle(600.0f);
@@ -177,6 +172,7 @@ void ASection::OnGateTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponen
 	{
 		auto NewSection = GetWorld()->SpawnActor<ASection>(NewLocation, FRotator::ZeroRotator);
 		NewSection->SetBattleSection(true);
+		NewSection->SetState(ESectionState::READY);
 	}
 	else
 	{
