@@ -61,16 +61,18 @@ public:
 	virtual void Init(EObjType Type);
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
+	virtual void Die();
 
 	void SetIsDead(bool input);
 	bool GetIsDead();
+
+	EObjType GetObjType();
 
 protected:
 	virtual void BeginPlay() override;
 
 	void AttackCheck();
 
-	virtual void Die();
 
 public:
 	UPROPERTY(VisibleAnywhere, Category = Stat)
@@ -82,4 +84,6 @@ public:
 protected:
 	EObjType ObjType{ EObjType::PLAYER };
 	bool IsDead{ false };
+
+	class Machine* AttackMachine{ nullptr };
 };

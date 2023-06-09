@@ -24,8 +24,20 @@ EnemyManager::EnemyManager(UWorld* InputWorld, FVector FActorLocation) : World(I
 
 EnemyManager::~EnemyManager()
 {
-	World->GetTimerManager().ClearTimer(MyTimerHandle);
 	Enemys.Empty();
+
+	World->GetTimerManager().ClearTimer(MyTimerHandle);
+}
+
+AEnemyObject* EnemyManager::GetBoss()
+{
+	for (const auto& Enemy : Enemys)
+	{
+		if (Enemy->GetObjType() == EObjType::BOSS)
+			return Enemy;
+	}
+
+	return nullptr;
 }
 
 void EnemyManager::CreateEnemy()

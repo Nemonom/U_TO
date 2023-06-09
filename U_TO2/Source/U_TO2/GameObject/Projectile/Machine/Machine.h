@@ -14,6 +14,7 @@ public:
 	
 	void SetPos(const FVector& Pos);
 	void SetDir(const FVector& Dir);
+	void OnMasterDie();
 
 protected:
 	virtual void CreateProjectile();

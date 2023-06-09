@@ -23,10 +23,10 @@ public:
 	void SetPos(FVector ActorLocation);
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	virtual void Die() override;
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void Die() override;
 
 public:
 	UPROPERTY(VisibleAnywhere, Category = Effect)
@@ -35,8 +35,6 @@ public:
 private:
 	UPROPERTY()
 		class UPlayerAnimInstance* Anim{ nullptr };
-
-	class Machine* AttackMachine{ nullptr };
 
 	FTimerHandle DestroyTimerHandle = { };
 };

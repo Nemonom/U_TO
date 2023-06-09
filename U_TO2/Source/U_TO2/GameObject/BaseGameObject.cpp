@@ -2,6 +2,7 @@
 #include "CharacterStatComponent.h"
 #include "Components/WidgetComponent.h"
 #include "../UI/CharacterWidget.h"
+#include "Projectile/Machine/Machine.h"
 
 // Sets default values
 ABaseGameObject::ABaseGameObject()
@@ -101,6 +102,11 @@ void AActiveGameObject::Die()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SetActorEnableCollision(false);
+
+	AttackMachine->OnMasterDie();
+
+	delete AttackMachine;
+	AttackMachine = nullptr;
 }
 
 void AActiveGameObject::SetIsDead(bool input)
@@ -111,6 +117,11 @@ void AActiveGameObject::SetIsDead(bool input)
 bool AActiveGameObject::GetIsDead()
 {
 	return IsDead;
+}
+
+EObjType AActiveGameObject::GetObjType()
+{
+	return ObjType;
 }
 
 void AActiveGameObject::BeginPlay()

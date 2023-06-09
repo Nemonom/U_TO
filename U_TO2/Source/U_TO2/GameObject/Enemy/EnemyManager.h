@@ -11,6 +11,8 @@ public:
 	EnemyManager(UWorld* InputWorld, FVector FActorLocation);
 	~EnemyManager();
 
+	class AEnemyObject* GetBoss();
+
 private:
 	void CreateEnemy();
 

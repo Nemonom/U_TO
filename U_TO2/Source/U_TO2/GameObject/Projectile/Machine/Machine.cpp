@@ -12,6 +12,8 @@ Machine::Machine(UWorld* InputWorld, const EAttackType& InputAttackType)
 
 Machine::~Machine()
 {
+	ProjectileArray.Empty();
+	World = nullptr;
 }
 
 void Machine::Tick(float DeltaTime)
@@ -27,6 +29,13 @@ void Machine::SetDir(const FVector& Dir)
 {
 	CustomDir = Dir;
 }
+
+void Machine::OnMasterDie()
+{
+	if (World)
+		World->GetTimerManager().ClearTimer(ProjectileTimerHandle);
+}
+
 
 void Machine::CreateProjectile()
 {

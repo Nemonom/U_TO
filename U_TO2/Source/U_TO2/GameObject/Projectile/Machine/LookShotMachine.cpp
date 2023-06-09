@@ -16,7 +16,6 @@ LookShotMachine::LookShotMachine(UWorld* InputWorld, const EAttackType& InputAtt
 
 LookShotMachine::~LookShotMachine()
 {
-	World->GetTimerManager().ClearTimer(ProjectileTimerHandle);
 }
 
 void LookShotMachine::CreateProjectile()

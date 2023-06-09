@@ -137,8 +137,5 @@ void AEnemyObject::Die()
 		), 3.f, false);
 	}
 
-	delete AttackMachine;
-	AttackMachine = nullptr;
-
 	Super::Die();
 }

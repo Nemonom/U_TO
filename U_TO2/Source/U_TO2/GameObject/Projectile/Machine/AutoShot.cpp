@@ -16,7 +16,6 @@ AutoShot::AutoShot(UWorld* InputWorld, const EAttackType& InputAttackType) : Mac
 
 AutoShot::~AutoShot()
 {
-	World->GetTimerManager().ClearTimer(ProjectileTimerHandle);
 }
 
 void AutoShot::CreateProjectile()

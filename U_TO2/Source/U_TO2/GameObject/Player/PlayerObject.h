@@ -25,13 +25,13 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PossessedBy(AController* NewController) override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	virtual void Die() override;
 
 	bool GetIsUsingDash();
 	void SetWeapon(class AWeaponObject* NewWeapon);
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void Die() override;
 
 	void SetControlMode(EViewMode ControlMode);
 
@@ -95,6 +95,4 @@ private:
 	bool IsUsingDash{ false };
 
 	FVector2D CameraInput;
-
-	class Machine* AttackMachine{ nullptr };
 };

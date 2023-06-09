@@ -144,9 +144,6 @@ void APlayerObject::BeginPlay()
 void APlayerObject::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
-
-	if (AttackMachine)
-		AttackMachine->EndPlay();
 }
 
 void APlayerObject::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -168,9 +165,6 @@ void APlayerObject::SetWeapon(AWeaponObject* NewWeapon)
 void APlayerObject::Die()
 {
 	Anim->SetDeadAnim(true);
-
-	delete AttackMachine;
-	AttackMachine = nullptr;
 
 	Super::Die();
 }

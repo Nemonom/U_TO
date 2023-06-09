@@ -15,12 +15,13 @@ WaveMachine::WaveMachine(UWorld* InputWorld, const EAttackType& InputAttackType)
 
 WaveMachine::~WaveMachine()
 {
-	ProjectileArray.Empty();
-	World->GetTimerManager().ClearTimer(ProjectileTimerHandle);
 }
 
 void WaveMachine::CreateProjectile()
 {
+	if (nullptr == World)
+		return;
+
 	for (int i = 0; i < 10; i++)
 	{
 		FTransform transform;

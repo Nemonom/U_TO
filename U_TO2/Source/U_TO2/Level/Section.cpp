@@ -1,5 +1,6 @@
 #include "Section.h"
 #include "../../U_TO2/GameObject/Enemy/EnemyManager.h"
+#include "../../U_TO2/GameObject/Enemy/EnemyObject.h"
 #include "../../U_TO2/GameObject/Player/PlayerObject.h"
 
 ASection::ASection()
@@ -94,8 +95,9 @@ void ASection::SetState(ESectionState NewState)
 	case ESectionState::BATTLE:
 	{
 		EnemyManager_ = new EnemyManager(GetWorld(), Mesh->GetComponentLocation());
-		
-		// playerÇÑÅ×µµ set
+		auto Boss = EnemyManager_->GetBoss();
+		if (Boss)
+			Boss->OnDestroyed.AddDynamic(this, &ASection::OnBossDestroyed);
 
 		Trigger->SetCollisionProfileName(TEXT("NoCollision"));
 		for (UBoxComponent* GateTrigger : GateTriggers)
@@ -113,9 +115,6 @@ void ASection::SetState(ESectionState NewState)
 	break;
 	case ESectionState::COMPLETE:
 	{
-		delete EnemyManager_;
-		EnemyManager_ = nullptr;
-	
 		Trigger->SetCollisionProfileName(TEXT("NoCollision"));
 		for (UBoxComponent* GateTrigger : GateTriggers)
 		{
@@ -178,6 +177,14 @@ void ASection::OnGateTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponen
 	{
 		UE_LOG(LogTemp, Warning, TEXT("New section area is not empty."));
 	}
+}
+
+void ASection::OnBossDestroyed(AActor* DestroyedActor)
+{
+	SetState(ESectionState::COMPLETE);
+
+	delete EnemyManager_;
+	EnemyManager_ = nullptr;
 }
 
 void ASection::EndPlay(const EEndPlayReason::Type EndPlayReason)
