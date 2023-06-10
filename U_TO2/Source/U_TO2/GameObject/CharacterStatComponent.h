@@ -6,6 +6,7 @@
 
 DECLARE_MULTICAST_DELEGATE(FOnHPIsZeroDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
+DECLARE_DELEGATE(FOnDestroyDelegate);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class U_TO2_API UCharacterStatComponent : public UActorComponent
@@ -14,6 +15,7 @@ class U_TO2_API UCharacterStatComponent : public UActorComponent
 
 public:	
 	UCharacterStatComponent();
+	virtual void OnComponentDestroyed(bool bDestroyingHierarchy) override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -31,6 +33,7 @@ public:
 
 	FOnHPIsZeroDelegate OnHPIsZero;
 	FOnHPChangedDelegate OnHPChanged;
+	FOnDestroyDelegate OnDestroy;
 
 private:
 	struct FCharacterData* CurrentStatData{ nullptr };

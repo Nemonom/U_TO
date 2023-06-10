@@ -8,6 +8,14 @@ UCharacterStatComponent::UCharacterStatComponent()
 	bWantsInitializeComponent = true;
 }
 
+void UCharacterStatComponent::OnComponentDestroyed(bool bDestroyingHierarchy)
+{
+	Super::OnComponentDestroyed(bDestroyingHierarchy);
+
+	if (OnDestroy.IsBound())
+		OnDestroy.Execute();
+}
+
 void UCharacterStatComponent::BeginPlay()
 {
 	Super::BeginPlay();

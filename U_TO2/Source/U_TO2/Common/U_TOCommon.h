@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine.h"
 #include "DrawDebugHelpers.h"
+#include "Delegates/Delegate.h"
 
 enum class EScene
 {

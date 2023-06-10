@@ -15,6 +15,8 @@ class U_TO2_API UCharacterWidget : public UUserWidget
 public:
 	void BindCharacterStat(class UCharacterStatComponent* NewCharacterStat);
 
+	void SetCurrentEnemyStat(UCharacterStatComponent* NewEnemyStat);
+
 protected:
 	virtual void NativeConstruct() override;
 	void UpdateHPWidget();
@@ -24,4 +26,9 @@ private:
 
 	UPROPERTY()
 		class UProgressBar* HPProgressBar;
+
+	UPROPERTY()
+		class UProgressBar* EnemyHPProgressBar;
+
+	TWeakObjectPtr<class UCharacterStatComponent> CurrentEnemyStat{ nullptr };
 };
