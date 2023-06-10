@@ -28,10 +28,13 @@ void LookShotMachine::CreateProjectile()
 	transform.SetRotation(FRotator::ZeroRotator.Quaternion());
 
 	AProjectileObject* NewProjectile = World->SpawnActorDeferred<AProjectileObject>(AProjectileObject::StaticClass(), transform);
-	NewProjectile->Init(AttackType);
-	NewProjectile->SetScale(FVector(0.2f, 0.2f, 0.2f));
-	NewProjectile->FireInDirection(CustomDir.GetSafeNormal());
-	ProjectileArray.Add(NewProjectile);
+	if (NewProjectile)
+	{
+		NewProjectile->Init(AttackType);
+		NewProjectile->SetScale(FVector(0.2f, 0.2f, 0.2f));
+		NewProjectile->FireInDirection(CustomDir.GetSafeNormal());
+		ProjectileArray.Add(NewProjectile);
 
-	UGameplayStatics::FinishSpawningActor(NewProjectile, transform);
+		UGameplayStatics::FinishSpawningActor(NewProjectile, transform);
+	}
 }

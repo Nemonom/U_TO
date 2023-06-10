@@ -95,4 +95,6 @@ private:
 	bool IsUsingDash{ false };
 
 	FVector2D CameraInput;
+
+	FTimerHandle CreateMachineTimer = { };
 };

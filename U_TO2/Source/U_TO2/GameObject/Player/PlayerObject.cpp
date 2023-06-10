@@ -56,9 +56,6 @@ APlayerObject::APlayerObject()
 
 	AttackRange = 200.0f;
 	AttackRadius = 50.0f;
-
-	AttackMachine = new LookShotMachine(GetWorld(), EAttackType::PLAYER);
-	AttackMachine->SetPos(GetActorLocation());
 }
 
 void APlayerObject::Tick(float DeltaTime)
@@ -132,6 +129,9 @@ bool APlayerObject::GetIsUsingDash()
 void APlayerObject::BeginPlay()
 {
 	Super::BeginPlay();
+
+	AttackMachine = new LookShotMachine(GetWorld(), EAttackType::PLAYER);
+	AttackMachine->SetPos(GetActorLocation());
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerObject::OnBeginOverlap);
 

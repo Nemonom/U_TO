@@ -29,9 +29,6 @@ AEnemyObject::AEnemyObject()
 		Effect->SetTemplate(P_OPEN.Object);
 		Effect->bAutoActivate = false;
 	}
-
-	AttackMachine = new WaveMachine(GetWorld(), EAttackType::ENEMY);
-	AttackMachine->SetPos(GetActorLocation());
 }
 
 AEnemyObject::~AEnemyObject()
@@ -71,9 +68,6 @@ void AEnemyObject::Init(EObjType Type)
 		USkeletalMesh* SkeletalMesh = LoadObject<USkeletalMesh>(nullptr, *MeshPath);
 		if (SkeletalMesh)
 			GetMesh()->SetSkeletalMesh(SkeletalMesh);
-
-		AttackMachine = new AutoShot(GetWorld(), EAttackType::ENEMY);
-		AttackMachine->SetPos(GetActorLocation());
 	}
 	//FString MeshPath;
 
@@ -120,6 +114,17 @@ float AEnemyObject::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 void AEnemyObject::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (ObjType == EObjType::ENEMY)
+	{
+		AttackMachine = new AutoShot(GetWorld(), EAttackType::ENEMY);
+		AttackMachine->SetPos(GetActorLocation());
+	}
+	else
+	{
+		AttackMachine = new WaveMachine(GetWorld(), EAttackType::ENEMY);
+		AttackMachine->SetPos(GetActorLocation());
+	}
 
 	Effect->Activate(true);
 }
