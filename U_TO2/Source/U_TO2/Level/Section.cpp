@@ -122,6 +122,9 @@ void ASection::SetState(ESectionState NewState)
 		}
 
 		OperateGates(true);
+
+		if (EnemyManager_)
+			EnemyManager_->KillAllEnemy();
 	}
 	break;
 	}
@@ -182,9 +185,6 @@ void ASection::OnGateTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponen
 void ASection::OnBossDestroyed(AActor* DestroyedActor)
 {
 	SetState(ESectionState::COMPLETE);
-
-	delete EnemyManager_;
-	EnemyManager_ = nullptr;
 }
 
 void ASection::EndPlay(const EEndPlayReason::Type EndPlayReason)

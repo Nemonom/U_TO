@@ -12,6 +12,7 @@ public:
 	~EnemyManager();
 
 	class AEnemyObject* GetBoss();
+	void KillAllEnemy();
 
 private:
 	void CreateEnemy();

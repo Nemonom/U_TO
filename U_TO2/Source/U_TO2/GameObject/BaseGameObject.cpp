@@ -103,10 +103,12 @@ void AActiveGameObject::Die()
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SetActorEnableCollision(false);
 
-	AttackMachine->OnMasterDie();
-
-	delete AttackMachine;
-	AttackMachine = nullptr;
+	if (AttackMachine)
+	{
+		AttackMachine->OnMasterDie();
+		delete AttackMachine;
+		AttackMachine = nullptr;
+	}
 }
 
 void AActiveGameObject::SetIsDead(bool input)

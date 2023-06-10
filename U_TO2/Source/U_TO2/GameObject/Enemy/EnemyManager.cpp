@@ -40,6 +40,14 @@ AEnemyObject* EnemyManager::GetBoss()
 	return nullptr;
 }
 
+void EnemyManager::KillAllEnemy()
+{
+	for (const auto& Enemy : Enemys)
+	{
+		Enemy->Die();
+	}
+}
+
 void EnemyManager::CreateEnemy()
 {
 	for (int i = 0; i < CreateEnemyNum; ++i)
