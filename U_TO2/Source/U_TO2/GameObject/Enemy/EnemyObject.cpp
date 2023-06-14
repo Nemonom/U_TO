@@ -3,6 +3,7 @@
 #include "../../Ani/PlayerAnimInstance.h"
 #include "../Projectile/Machine/WaveMachine.h"
 #include "../Projectile/Machine/AutoShot.h"
+#include "EnemyAIController.h"
 
 AEnemyObject::AEnemyObject()
 {
@@ -68,6 +69,9 @@ void AEnemyObject::Init(EObjType Type)
 		USkeletalMesh* SkeletalMesh = LoadObject<USkeletalMesh>(nullptr, *MeshPath);
 		if (SkeletalMesh)
 			GetMesh()->SetSkeletalMesh(SkeletalMesh);
+
+		AIControllerClass = AEnemyAIController::StaticClass();
+		AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	}
 	//FString MeshPath;
 

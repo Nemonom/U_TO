@@ -8,6 +8,8 @@ public class U_TO2 : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "UMG" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject"
+			, "Engine", "InputCore", "HeadMountedDisplay", "UMG", "NavigationSystem"
+			, "AIModule" });
 	}
 }

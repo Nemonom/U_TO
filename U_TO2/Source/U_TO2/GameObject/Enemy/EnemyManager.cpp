@@ -55,10 +55,18 @@ void EnemyManager::CreateEnemy()
 		FActorSpawnParameters SpawnInfo;
 		SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-		AEnemyObject* NewEnemy = World->SpawnActor<AEnemyObject>(AEnemyObject::StaticClass(), SpawnInfo);
-		//  AMyActor* pActor = GetWorld()->SpawnActorDeferred<AMyActor>(MyActorTemplate, GetActorLocation(), SpawnRotation); 
-		NewEnemy->Init(EObjType::ENEMY);
-		NewEnemy->SetPos(ActorLocation);
-		Enemys.Add(NewEnemy);
+		FTransform transform;
+		transform.SetTranslation(FVector::ZeroVector);
+		transform.SetRotation(FRotator::ZeroRotator.Quaternion());
+
+		AEnemyObject* NewEnemy = World->SpawnActorDeferred<AEnemyObject>(AEnemyObject::StaticClass(), transform);
+		if (NewEnemy)
+		{
+			NewEnemy->Init(EObjType::ENEMY);
+			NewEnemy->SetPos(ActorLocation);
+			Enemys.Add(NewEnemy);
+
+			UGameplayStatics::FinishSpawningActor(NewEnemy, transform);
+		}
 	}
 }
