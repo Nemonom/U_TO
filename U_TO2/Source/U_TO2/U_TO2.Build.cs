@@ -10,6 +10,6 @@ public class U_TO2 : ModuleRules
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject"
 			, "Engine", "InputCore", "HeadMountedDisplay", "UMG", "NavigationSystem"
-			, "AIModule" });
+			, "AIModule", "GameplayTasks" });
 	}
 }

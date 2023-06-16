@@ -29,7 +29,10 @@ AEnemyObject::AEnemyObject()
 	{
 		Effect->SetTemplate(P_OPEN.Object);
 		Effect->bAutoActivate = false;
-	}
+	}	
+
+	AIControllerClass = AEnemyAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 AEnemyObject::~AEnemyObject()
@@ -70,8 +73,7 @@ void AEnemyObject::Init(EObjType Type)
 		if (SkeletalMesh)
 			GetMesh()->SetSkeletalMesh(SkeletalMesh);
 
-		AIControllerClass = AEnemyAIController::StaticClass();
-		AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
 	}
 	//FString MeshPath;
 

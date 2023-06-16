@@ -10,10 +10,19 @@ EnemyManager::EnemyManager(UWorld* InputWorld, FVector FActorLocation) : World(I
 	FActorSpawnParameters SpawnInfo;
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	AEnemyObject* Enemy = World->SpawnActor<AEnemyObject>(AEnemyObject::StaticClass(), SpawnInfo);
-	Enemy->Init(EObjType::BOSS);
-	Enemy->SetPos(ActorLocation);
-	Enemys.Add(Enemy);
+	FTransform transform;
+	transform.SetTranslation(FVector::ZeroVector);
+	transform.SetRotation(FRotator::ZeroRotator.Quaternion());
+
+	AEnemyObject* NewEnemy = World->SpawnActorDeferred<AEnemyObject>(AEnemyObject::StaticClass(), transform);
+	if (NewEnemy)
+	{
+		NewEnemy->Init(EObjType::BOSS);
+		NewEnemy->SetPos(ActorLocation);
+		Enemys.Add(NewEnemy);
+
+		UGameplayStatics::FinishSpawningActor(NewEnemy, transform);
+	}
 
 	World->GetTimerManager().SetTimer(MyTimerHandle, FTimerDelegate::CreateLambda([this]() -> void
 		{
