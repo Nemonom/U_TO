@@ -32,6 +32,8 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Effect)
 		UParticleSystemComponent* Effect;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
+		class AAIController* AIController;
 private:
 	UPROPERTY()
 		class UPlayerAnimInstance* Anim{ nullptr };

@@ -1,6 +1,7 @@
 #include "Section.h"
 #include "../../U_TO2/GameObject/Enemy/EnemyManager.h"
 #include "../../U_TO2/GameObject/Enemy/EnemyObject.h"
+#include "../../U_TO2/Item/ItemObject.h"
 #include "../../U_TO2/GameObject/Player/PlayerObject.h"
 
 ASection::ASection()
@@ -107,10 +108,9 @@ void ASection::SetState(ESectionState NewState)
 
 		OperateGates(false);
 
-		//GetWorld()->GetTimerManager().SetTimer(SpawnItemBoxTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
-		//	FVector2D RandXY = FMath::RandPointInCircle(600.0f);
-		//	GetWorld()->SpawnActor<AABItemBox>(GetActorLocation() + FVector(RandXY, 30.0f), FRotator::ZeroRotator);
-		//	}), ItemBoxSpawnTime, false);
+		GetWorld()->GetTimerManager().SetTimer(SpawnItemBoxTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
+			GetWorld()->SpawnActor<AItemObject>(GetActorLocation() + FVector(FMath::RandPointInCircle(600.0f), 30.0f), FRotator::ZeroRotator);
+			}), 5.0f, false);
 	}
 	break;
 	case ESectionState::COMPLETE:

@@ -55,4 +55,6 @@ private:
 	ESectionState CurrentState{ ESectionState::READY };
 
 	class EnemyManager* EnemyManager_{ nullptr };
+
+	FTimerHandle SpawnItemBoxTimerHandle = { };
 };

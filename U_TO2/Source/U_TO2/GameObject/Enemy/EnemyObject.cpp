@@ -4,6 +4,7 @@
 #include "../Projectile/Machine/WaveMachine.h"
 #include "../Projectile/Machine/AutoShot.h"
 #include "EnemyAIController.h"
+#include "NavigationSystem.h"
 
 AEnemyObject::AEnemyObject()
 {
